@@ -1,0 +1,58 @@
+\documentclass[11pt]{newlfm}
+\usepackage{setspace}
+\onehalfspacing
+\newlfmP{leftmarginsize=.75in,leftmarginskipright=15pt,topmarginskip=2em,%
+stdletter,
+noheadline,nofootline,dateright,addrfromright,%
+orderfromdateto,sigleft}
+
+
+\nameto{Prof.~William Jorgensen}
+\addrto{%\parbox{2.5in}{
+Department of Chemistry\\
+Yale University\\
+PO Box 208107\\
+New Haven, CT 06520-8107}
+
+\namefrom{Rajarshi Guha}
+\addrfrom{%\parbox{2.5in}{
+NIH Center for Advancing Translational Science \\
+9800 Medical Center Drive \\
+Rockville, MD 20852
+}%}
+\phonefrom{814 404 5449}
+
+
+\begin{document}
+    \closeline{Yours Sincerely,}
+   \greetto{Dear Prof.~Jorgensen,}
+    \begin{newlfm}
+      I would like to submit an article titled ``\emph{Exploring
+        Uncharted Territories - Predicting Activty Cliffs in
+        Structure-Activity Landscapes}'' for publication in the
+      Journal of Chemical Information and Modeling.
+
+      The article builds on previous work that defined a numerical
+      quantification of structure activity landscapes, termed the
+      Structure Activity Landscape Index. This (and other methods such
+      as SARI) have been used to characterize SAR data using the
+      landscape paradigm, allowing users to identify activity cliffs
+      in their datasets. However, these approaches have primarily been
+      retrospective. In this paper I highlight how SALI can be used in
+      a prospective manner, such that one can predict SALI values for
+      pairs of molecules, one of which is a new, untested molecule. In
+      other words, the method discussed in this paper allows one to
+      prospectively prioritize new molecules as likely to exhibit
+      activity cliffs with one or more members of the original
+      dataset. The predictive approach is based on random forest
+      models and considers the data set in a pairwise fashion - thus
+      making it amenable for small SAR datasets. The models exhibit
+      good predictive performance, suggesting the utility of this
+      approach.
+%  \vskip 0.5em
+    \end{newlfm}
+\end{document}
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: t
+%%% End: 

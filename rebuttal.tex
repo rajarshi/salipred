@@ -1,0 +1,73 @@
+\documentclass[letterpaper, 12pt]{article}
+\usepackage{url}
+\usepackage{ctable}
+\usepackage{amsmath,amssymb}      % for \AA etc
+\usepackage[onehalfspacing]{setspace}
+\usepackage{graphicx}
+\usepackage{times}
+
+\DeclareGraphicsExtensions{.eps,.png}
+\onehalfspacing
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1em}
+\usepackage{anysize}
+
+\begin{document}
+
+I would like to thank the reviewers for their thorough comments on the original submissions. I have
+prepared a revised manuscript that address the comments and my responses are detailed below.
+
+\fbox{\textbf{Reviewer: 1}}
+
+Recommendation: Publish after major revisions noted.
+
+Comments:
+The prediction of activity cliffs is a nice idea that would further extend activity landscape modeling. This is attempted by predicting SALI values for compound pairs on the basis of training data. Unfortunately, there are a number of technical issues to note and, more importantly, methodological concerns that would need to be carefully addressed before publication of this study might be considered.  
+
+First, a few general comments: 
+(1) Please, note that there are numerous typographical errors throughout the manuscript (which is quite disturbing). Unfortunately, the presentation of the work is sloppy at different levels.       
+(2) Chosen methods and descriptors should at least be referenced. For example, no references are provided for BCI and CDK.
+
+Second, there are shortcomings at the technical level:
+(3) The derivation of RF models is essentially not described (except of making reference to default parameters settings in R). It remains largely unclear how these models were developed. 
+(4) The selection of training and test sets should be clearly specified in the Methods section. For example, how were the RF models trained and evaluated for which predictions of pair-wise SALI values are reported in Figure 2? It is hoped that the reported SALI values were not predicted for the training data.
+(5) No support is provided for the assumption that the RF models “are relatively robust even for datasets of small size”. In fact, the author later on states several times that limited model quality might be due to the use of small compound sets. Appropriate validation will be essential here.
+(6) There is only limited statistical assessment/validation of the models. Statements made in the text that R2 values are “reasonable” and the models perform “relatively well” are difficult to reconcile. Rather, Table 2 indicates that the R2 values were rather poor in several instances.
+(7) It appears that there are systematic prediction errors for pairs. At low value ranges (that are not relevant for activity cliff assessment), SALI values are consistently over-predicted. By contrast, at high value ranges (that are relevant), SALI values are consistently under-predicted, in part significantly. This is not investigated, although the apparent errors at high value ranges are the perhaps most critical features of the reported RF models.    
+(8) In the section “Extending a landscape”, predictions are finally reported for only three (!) molecules taken out of each data set. Carefully put, the predictions are heterogeneous. On the basis of the results reported for this little bit of evaluation, one would be hard pressed to make a case for the ability of the approach to predict activity cliffs with any certainty.        
+
+Third, there are major scientific concerns:
+(9) For the prediction of activity cliffs, SALI values must be calculated for compound pairs. This is the central idea of the approach. Accordingly, fingerprint descriptors and potency values must be combined in some ways. 
+(9.1.) It is nowhere stated how activity values are treated for compounds forming a pair. Are activity differences calculated at the pair level? If so, how are activity differences compared for the calculation of pair-based SALI scores - as a difference of differences? It should be noted predicted potency values in Figures 4-6 are essentially all over the place.
+(9.2.) To obtain a fingerprint descriptor for a pair, the author aggregates fingerprints of individual molecules, finally, by simple averaging. For comparisons of pairs, Tanimoto similarity is then calculated for averaged fingerprints, which presents an artificial assessment of pair similarity (one can easily come up with a few hypothetical compound similarity relationships that make this assessment questionable at best). As a consequence, activity cliffs are considered for which Tanimoto similarity calculations yield values between 0.2 and 0.3! Thus, on the basis of these similarity calculations, one could never decide which level of similarity might be cliff relevant. In this respect, the descriptions of activity cliff by the author are quite telling – he speaks of “predicted” versus “true” activity cliffs, of “relatively accurate” activity cliffs, and of “most significant activity cliffs that are in fact not very significant activity cliffs in an absolute sense”, and so on. 
+Furthermore, there might be many instances of activity and fingerprint similarity relationships between pairs of compounds that might yield high pair-based SALI scores dominated by either the activity or similarity component, without forming a “true” activity cliff. The conclusion of this reviewer is that it is currently not possible to capture activity cliffs with any degree of certainty on the basis of the pair calculations, as reported.
+(10) It also remains largely obscure how an activity landscape should be extended following this approach by compounds for which no activity information is available. Should the activity first be predicted by an RF model and then used for pair-based SALI score calculations? One would hope not.
+
+In summary, there will be quite a bit of work required to get this manuscript in shape for publication, both in terms of its presentation and technical content. However, as long as points (9) and (10) are not thoroughly addressed scientifically, this work should not be published.
+
+To give the author the benefit of the doubt -and credit for the underlying idea- this reviewer calls for “Major Revisions”, although the study might as well be considered premature at this point. 
+
+Additional Questions:
+Please rate the quality of the science reported in this paper (10 - High Quality/ 1 - Low Quality): 4
+
+Please rate the overall importance of this paper to the field of chemical information or modeling (10 - High Importance / 1 - Low Importance): 6
+
+\fbox{\textbf{Reviewer: 2}}
+
+\textbf{1.  The manuscript is poorly written.  There are many typos, grammatical errors, missing
+  references, and incomplete descriptions of methods and results.}
+
+The text has been thoroughly proof read to remove typos and incorrect grammar. References have been
+added and methods have been described more clearly.
+
+\textbf{2.  Qualitative assessments of results are not acceptable.  The authors should give
+  statistical evaluations and corresponding metrics for models and their predictions.}
+
+\textbf{3.  The tests sets are too small to make any meaningful conclusions.}
+
+\textbf{4.  SALI values needs to be determined for pairs of molecules - is that not the essence of
+  the methodology?}
+
+\textbf{5.  There is no discussion/direction of how to use the methodology in new applications.}
+\end{document}

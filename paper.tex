@@ -45,34 +45,35 @@ NIH Center for Advancing Translational Sciences \\ 9800 Medical Center Drive  Ro
   dataset. The current study focuses on employing a pairwise characterization of a dataset to train
   a model to predict whether a new molecule will exhibit an activity cliff with one or more members
   of the dataset. The approach is based on predicting a value for pairs of objects rather than the
-  individual objects themselves (and thus allows for robust models even for small SAR datasets). We
-  extracted structure-activity data for several ChEMBL assays and developed random forest models to
-  predict SALI values, from pairwise combinations of molecular descriptors. The models exhibited
-  reasonable RMSE's though, surprisingly, performance on the more significant cliffs tended to be
-  better than on the lesser ones. Our results indicate that the predictive models are able to
-  prioritize molecules in terms of their ability to activity cliffs and can be used as a way to
-  extend an observed activity landscape to identify molecules that could lead to significant
-  improvements in activity. Conversely, the method can be used to deprioritize molecules that are
-  predicted to show an activity cliff with a potent molecule already in the dataset.
+  individual objects themselves (and thus allows for robust models even for small structure-activity
+  relationship datasets). We extracted structure-activity data for several ChEMBL assays and
+  developed random forest models to predict SALI values, from pairwise combinations of molecular
+  descriptors. The models exhibited reasonable RMSE's though, surprisingly, performance on the more
+  significant cliffs tended to be better than on the lesser ones. Our results indicate that the
+  predictive models are able to prioritize molecules in terms of their ability to activity cliffs
+  and can be used as a way to extend an observed activity landscape to identify molecules that could
+  lead to significant improvements in activity. Conversely, the method can be used to deprioritize
+  molecules that are predicted to show an activity cliff with a potent molecule already in the
+  dataset.
 \end{abstract}
 
 \section{Introduction}
 
-The landscape paradigm for SAR data was first proposed 20 years ago \cite{Johnson:1990ys} and has
-recently seen a resurgence with a number of studies describing new ways to quantify and visualize
-activity landscapes. When SAR data is viewed as a landscape, with the X-Y plane representing
-structural characteristics (which will usually be a 2-dimensional representation of a
-multi-dimensional descriptor space) and the Z-axis representing the observed activities, one can
-identify two broad types of regions on the landscape - smooth rolling regions, corresponding to set
-of molecules exhibiting continuous SAR (i.e., similar structures and similar activities) and rough,
-gorge-like regions (i.e., very similar structures, but large differences in activity) corresponding
-to molecules that exhibit SAR discontinuity. The latter have also been term activity cliffs
-\cite{Maggiora:2006aa}. From a medicinal chemistry point of view, the latter regions of a landscape
-can be the most interesting as they can provide insight into structural features that are key to
-improving (or conversely reducing) potency. There is a rich history of methods that have correlated
-structural differences with corresponding differences in activity -- matched molecular pairs
-\cite{Leach:2006aa}, SAS maps \cite{Maggiora:2011kx} and more recently SALI \cite{Guha:2008aa} and
-SARI \cite{Peltason:2007aa}. Both SALI and SARI focus on numerically characterizing a structure
+The landscape paradigm for structure-activity relationship (SAR) data was first proposed 20 years
+ago \cite{Johnson:1990ys} and has recently seen a resurgence with a number of studies describing new
+ways to quantify and visualize activity landscapes. When SAR data is viewed as a landscape, with the
+X-Y plane representing structural characteristics (which will usually be a 2-dimensional
+representation of a multi-dimensional descriptor space) and the Z-axis representing the observed
+activities, one can identify two broad types of regions on the landscape - smooth rolling regions,
+corresponding to set of molecules exhibiting continuous SAR (i.e., similar structures and similar
+activities) and rough, gorge-like regions (i.e., very similar structures, but large differences in
+activity) corresponding to molecules that exhibit SAR discontinuity. The latter have also been term
+activity cliffs \cite{Maggiora:2006aa}. From a medicinal chemistry point of view, the latter regions
+of a landscape can be the most interesting as they can provide insight into structural features that
+are key to improving (or conversely reducing) potency. There is a rich history of methods that have
+correlated structural differences with corresponding differences in activity -- matched molecular
+pairs \cite{Leach:2006aa}, SAS maps \cite{Maggiora:2011kx} and more recently SALI \cite{Guha:2008aa}
+and SARI \cite{Peltason:2007aa}. Both SALI and SARI focus on numerically characterizing a structure
 activity landscape. The former is defined for a pair of molecules as
 \begin{equation}
   \label{eq:1}
@@ -154,16 +155,17 @@ and possible extensions of this work.
 \label{sec:datasets}
 For this study we considered a number of datasets, which are summarized in Table \ref{tab:data}. The
 Cavalli dataset was employed in our previous studies consisted of 30 molecules studied by Cavalli et
-al\cite{Cavalli:2002aa} as possible hErg inhibitors using a pharmacophore modeling approach. The
-remaining datasets were obtained from ChEMBL. All three assays involved direct binding to a human
-target and we considered the subset of molecules in each assay that had non-censored experimental
-values. The Costanzo dataset\cite{Costanzo:2005uq} consisted of 60 $\alpha$-ketoheterocyclic
-inhibitors of $\alpha$-thrombin. The reported $\mathrm{IC_{50}}$ values ranged from 3 nM to 82
-$\mu$M. The Kalla dataset\cite{Kalla:2006kx} consisted of 38 8-(C-4-pyrazolyl) xanthines, identified
-as antagonists of the A2B adenosine receptor. The reported $K_i$ values ranged from 0.9 nM to 42
-$\mu$M. Finally, the Dai dataset\cite{Dai:2007kl} consisted of 44 3-aminoindazole derivatives
-studied for their ability to inhibit the VEGF and PDGF receptor families, with $\mathrm{IC_{50}}$
-values ranging from 3 nM to 12~$\mu$M.
+al\cite{Cavalli:2002aa} as possible hErg inhibitors using a CoMFA modeling approach. The reported
+endpoint for the molecules was a pIC$_{50}$.The remaining datasets were obtained from ChEMBL. All
+three assays involved direct binding to a human target and we considered the subset of molecules in
+each assay that had non-censored experimental values. The Costanzo dataset\cite{Costanzo:2005uq}
+consisted of 60 $\alpha$-ketoheterocyclic inhibitors of $\alpha$-thrombin. The reported
+$\mathrm{IC_{50}}$ values ranged from 3 nM to 82 $\mu$M. The Kalla dataset\cite{Kalla:2006kx}
+consisted of 38 8-(C-4-pyrazolyl) xanthines, identified as antagonists of the A2B adenosine
+receptor. The reported $K_i$ values ranged from 0.9 nM to 42 $\mu$M. Finally, the Dai
+dataset\cite{Dai:2007kl} consisted of 44 3-aminoindazole derivatives studied for their ability to
+inhibit the VEGF and PDGF receptor families, with $\mathrm{IC_{50}}$ values ranging from 3 nM to
+12~$\mu$M.
 
 % To obtain the remaining datasets we mined the
 % ChEMBL database to identify assays with the following constraints:
@@ -179,323 +181,244 @@ values ranging from 3 nM to 12~$\mu$M.
 \section{Methodology}
 \label{sec:methodology}
 As noted above, the problem of identifying activity cliffs involving new molecules can be reduced to
-predicting the SALI value for the new molecule and a pre-existing molecule. Note that this does not
+predicting the SALI value for the new molecule and a preexisting molecule. Note that this does not
 result in an activity prediction for the new molecule; rather, it allows us to rank a set of new
-molecules in terms of their predicted ability to exhibit a significant activity difference from one
-or more of the molecules in the training set.
+molecules in terms of their predicted ability to exhibit a significant activity difference with
+respect to one or more of the molecules in the training set.
 
-Given a training set of $N$ molecules, we generate a new training set
-of $\frac{N(N-1)}{2}$ objects, where each object is a pair of
-molecules from the original training set. The dependent variable for
-each pair $i,j$, is the SALI value, $S_{i,j}$. SALI values were
-evaluated using the 1051-bit BCI keyed fingerprints or the CDK
-1024-bit path fingerprints. Based on the
-definition of SALI, it is possible that a pair of molecules have a
-$T_c = 1.0$ resulting in infinite values. For such cases, we replaced
-the infinite value with the highest non-infinite SALI value for that
-dataset. 
+Given a training set of $N$ molecules, we generate a new training set of $\frac{N(N-1)}{2}$ objects,
+where each object is a pair of molecules from the original training set. The dependent variable for
+each pair $i,j$, is the SALI value, $S_{i,j}$. SALI values were evaluated using the 1051-bit BCI
+keyed fingerprints (Digital Chemistry, UK) or the CDK\cite{Steinbeck:2006aa,Steinbeck:2003bh}
+1024-bit path fingerprints. Based on the definition of SALI, it is possible that a pair of molecules
+have a $T_c = 1.0$ resulting in infinite values. For such cases, we replaced the infinite value with
+the highest non-infinite SALI value for that dataset.
 
-The next step is to generate a set of independent variables. Since the
-new dataset consists of pairs of molecules, we consider the
-descriptors for the resultant objects as a function of the descriptor
-values of the individual molecules. For an object, representing the
-$i$'th and $j$'th molecules, its descriptor vector can be taken as the
-arithmetic mean of the descriptor vectors of the individual
-molecules. We denote this aggregation function as
-$f_{\textrm{mean}}$. Alternative functions that were investigated included
-the absolute difference of the individual descriptors, denoted by
-$f_{\textrm{diff}}$ and the geometric mean of the individual
-descriptor vectors, denoted by $f_{\textrm{geom}}$. 
+The next step is to generate a set of independent variables. Since the new dataset consists of pairs
+of molecules, we consider the descriptors for the resultant objects as a function of the descriptor
+values of the individual molecules. For an object, representing the $i$'th and $j$'th molecules, its
+descriptor vector can be taken as the arithmetic mean of the descriptor vectors of the individual
+molecules. We denote this aggregation function as $f_{\textrm{mean}}$. Alternative functions that
+were investigated included the absolute difference of the individual descriptors, denoted by
+$f_{\textrm{diff}}$ and the geometric mean of the individual descriptor vectors, denoted by
+$f_{\textrm{geom}}$.
 
-Given the independent and dependent variables for the pairwise
-dataset, we can now proceed to model development. For this study we
-focused on the use of random forest models\cite{Breiman:1984aa}. This
-was motivated by the fact that such models can be proven to not
-overfit and the fact that the algorithm implicitly performs feature
-selection. As a result, this allows us to forgo an explicit feature
-selection step and work directly with the descriptor pool (after
-removal of correlated and constant descriptors). Furthermore, there is
-no reason, \emph{a priori} to assume that the underlying SARs are
-linear. A random forest model, being an algorithmic
-approach\cite{Breiman:2001nx} (as opposed to a distributional one such
-as linear regression) makes no such assumptions. We employed the  
-implementation of random forest from the \texttt{randomForest}
-package, in R 2.11.0\cite{r}, using the defult settings.
+Given the independent and dependent variables for the pairwise dataset, we can now proceed to model
+development. For this study we focused on the use of random forest models\cite{Breiman:1984aa}. This
+was motivated by the fact that such models tend not to overfit the training data (given a
+sufficiently large number of trees) and the fact that the algorithm implicitly performs feature
+selection. As a result, this allows us to forgo an explicit feature selection step and work directly
+with the descriptor pool (after removal of correlated and constant descriptors). Furthermore, there
+is no reason, \emph{a priori} to assume that the underlying SAR's are linear. A random forest model,
+being an algorithmic approach\cite{Breiman:2001nx} (as opposed to a distributional one such as
+linear regression) makes no such assumptions. We employed the implementation of random forest from
+the \texttt{randomForest} package, in R 2.11.0\cite{r}, using the default settings.
 
-In this work, we employed the CDK to evaluate 109 2D and
-constitutional descriptors for each individual molecule. For each
-dataset, we performed objective feature selection by removing
-descriptors with constant or near-constant values followed by removal
-of descriptors that are highly correlated with others (using an $R^2$
-cutoff of 0.8). The size of the final descriptor pools is summarized
-in Table \ref{tab:data}.
+In this work, we employed the CDK to evaluate 109 2D and constitutional descriptors for each
+individual molecule. For each dataset, we performed objective feature selection by removing
+descriptors with constant or near-constant values followed by removal of descriptors that are highly
+correlated with others (using an $R^2$ cutoff of 0.8). The sizes of the final descriptor pool for
+each dataset are summarized in Table \ref{tab:data}.
 
-One feature of this approach is that one can build relatively robust
-models even for datasets of small size - say, 20 molecules. Of course,
-a large training set is just one aspect of a reliable model and other
-considerations such as diversity, descriptor selection and so on still
-play an important role.
+A side effect of the proposed approach is that one can build relatively robust models for datasets of
+small size -- say, 20 molecules. Of course, a large training set is just one aspect of a reliable
+model and other considerations such as diversity, descriptor selection and so on still play an
+important role.
 
 \subsection{Is structural information duplicated?}
 \label{sec:are-we-duplicating}
 
-One question that arises from the preceding discussion is the
-possibility that we are duplicating information between the dependent
-and independent variables. More specifically, both the dependent
-variable (i.e., the SALI values) and the aggregated descriptors
-characterize the molecules' structure. One might therefore ask whether
-models built using such data perform over-optimistically. Given the
-nature of the descriptors used in the indepdent and dependent
-variables (the former being based on multiple atom and bond features
-and the latter derived from purel topological paths), we believe that such a
-phenomenon is unlikely.  Fig.~\ref{fig:desccor1} displays a histogram
-of the pairwise Pearson correlations between the SALI values and each
-of the descriptor values for the Cavalli\cite{Cavalli:2002aa} dataset,
-using the different aggregation functions described above. It is
-evident, that the highest $R^2$, between any of the descriptors and
-the SALI values is less than 0.15. Similar behavior was observed for
-all the datasets used in this study. These observations
-suggest that the problem of including correlated structural
-information simultaneously in the dependent and independent variables
-is minimal.
+The preceding discussion raises the issue of explicitly duplicating structural information in the
+independent and dependent variables. More specifically, both the dependent variable (i.e., the SALI
+values) and the aggregated descriptors characterize the molecules' structure. One might therefore
+ask whether models built using such data perform over-optimistically. Given the nature of the
+descriptors used in the independent and dependent variables (the former being based on multiple atom
+and bond features and the latter derived from purely topological paths), we believe that such a
+phenomenon is unlikely.  Fig.~\ref{fig:desccor1} displays a histogram of the pairwise Pearson
+correlations between the SALI values and each of the descriptor values for the
+Cavalli\cite{Cavalli:2002aa} dataset, using the different aggregation functions described above. It
+is evident, that the highest $R^2$, between any of the descriptors and the SALI values is less than
+0.15. Similar behavior was observed for all the datasets used in this study. These observations
+suggest that problems arising from the inclusion of structural information simultaneously in the
+dependent and independent variables is minimal.
 
 \section{Results}
 \label{sec:applications}
-We first consider the application of the activity cliff prediction
-methodology to the Cavalli dataset. We developed three random forest
-models, using the three aggregation descriptor aggregation functions
-described in Section
-\ref{sec:methodology}. Fig.~\ref{fig:rfmodel-cavalli} presents the
-predicted versus observed SALI values from the three models and Table
-\ref{tab:rfmodel-results} summarizes the performance metrics for the
-three models. Overall the different aggregation functions do not
-differ dramatically in terms of the final model performance, though
-$f_{\textrm{mean}}$ appears to lead to the best performance. 
+We first consider the application of the SALI prediction methodology to the Cavalli dataset. We
+developed three random forest models, using the three aggregation descriptor aggregation functions
+described in Section \ref{sec:methodology}. Fig.~\ref{fig:rfmodel-cavalli} presents the predicted
+versus observed SALI values from the three models and Table \ref{tab:rfmodel-results} summarizes the
+performance metrics for the three models. Overall the different aggregation functions do not differ
+dramatically in terms of the final model performance as root mean square error (RMSE) ranges from
+0.98 to 1.11 log units. However, $f_{\textrm{mean}}$ appears to lead to the best performance (RMSE = 0.98 and
+$R^2$ = 0.67). In contrast, the RMSE and $R^2$ values for Y-scrambled\cite{Rucker:2007aa} models
+using the different aggregation functions ranged from 1.58 to 1.61 log units and 0.003 to 0.01, respectively.
 
-While the models are certainly not the most accurate models, the
-RMSE's and $R^2$ values are reasonable. Note that the predictions on
-the low end of the SALI values are not as important as those at the
-high end - simply because low SALI values correspond to small activity
-cliffs, which are likely not very interesting. Given that observation,
-it is encouraging to observe that all three models perform relatively
-well at the higher end of the SALI spectrum. For this example, the
-three most significant activity cliffs are in fact not very
-significant activity cliffs in an absolute sense - the $T_c$ for the
-the three pairs are just 0.2, 0.30 and 0.29, though the activity
-differences were 4.93, 5.0 and 5.11 log units respectively.
+Note that the predictions on the low end of the SALI values are not as important as those at the
+high end - simply because low SALI values correspond to small activity cliffs, which are likely not
+very interesting. Given that observation, it is encouraging to observe that all three models perform
+relatively well at the higher end of the SALI spectrum. For this example, the three most significant
+activity cliffs are in fact not very significant activity cliffs in an absolute sense - the $T_c$
+for the three pairs are just 0.2, 0.30 and 0.29, though the activity differences were 4.93, 5.0 and
+5.11 log units respectively.
 
-We observed that the use of the geometric mean did not lead to models
-that were any different from those generated using the arithmetic mean
-as the aggregation function. This was also true of the other datasets
-and so the following discussion ommits the results obtained when using
-$f_{\textrm{geom}}$. Fig.~\ref{fig:rfmodel-chembl} summarizes the
-models built on the ChEMBL datasets using $f_{\textrm{diff}}$ and
-$f_{\textrm{mean}}$ as the aggregation functions. Table
-\ref{tab:rfmodel-results} reports the model statistics.  While the
-differences in model performance do not vary significantly with the
-aggregation function used, we see that for the Costanzo and Kalla
-datasets, $f_{\textrm{diff}}$ leads to a slightly better model than
-when using $f_{\textrm{mean}}$, though for the Dai dataset, the
-difference is negligable.
+We observed that the performance of models based on geometric mean aggregation function did not
+differ substantially from those built with the arithmetic mean. This was also true of the other
+datasets and so the following discussion omits the results obtained when using
+$f_{\textrm{geom}}$. Fig.~\ref{fig:rfmodel-chembl} summarizes the models built on the ChEMBL
+datasets using $f_{\textrm{diff}}$ and $f_{\textrm{mean}}$ as the aggregation functions. Table
+\ref{tab:rfmodel-results} reports the model statistics.  While the differences in model performance
+do not vary significantly with the aggregation function used, we see that for the Costanzo and Kalla
+datasets, $f_{\textrm{diff}}$ leads to a slightly better model in terms of RMSE and $R^2$ than when
+using $f_{\textrm{mean}}$.
 
 
-Given the relatively small differences between models based on
-different aggregation functions, we arbitrarily chose
-$f_{\textrm{mean}}$ as the aggregagtion functin for subsequent
-analyses. Figs.~\ref{fig:costanzo-pred}, \ref{fig:kalla-pred} and
-\ref{fig:dai-pred} summarize the performance of the models built using
-the reported activity data and the pairwise SALI values for the
-Costanzo, Kalla and Froimowitz datasets, respectively. As with the
-Cavalli dataset, the SALI models exhibit more variance for small SALI
-values (i.e., less significant cliffs) but appear to perform better at
-the the higher end of the SALI values. However in all three cases, the
-most significant cliffs exhibit significant variance. In comparison,
-the models developed on the reported activity values are relatively
-poor. This can be partially ascribed to the small sizes of the
-dataset.
+Given the relatively small differences between models based on different aggregation functions, we
+arbitrarily chose $f_{\textrm{mean}}$ as the aggregation function for subsequent
+analyses. Figs.~\ref{fig:costanzo-pred}, \ref{fig:kalla-pred} and \ref{fig:dai-pred} summarize the
+performance of the models built using the reported activity data and the pairwise SALI values for
+the Costanzo, Kalla and Dai datasets, respectively. As with the Cavalli dataset, the SALI models
+exhibit more variance for small SALI values (i.e., less significant cliffs) but appear to perform
+better at the higher end of the SALI values. However in all three cases, the most significant cliffs
+exhibit significant variance. In comparison, the models developed on the reported activity values
+are relatively poor. This can be partially ascribed to the small sizes of the dataset. It should be
+note that this methodology is not aimed at modeling the original, usually small, SAR dataset. It is
+well known (and evident from the current analyses) that small datasets do not lead to very robust or
+reliable machine learning models. Instead, the methodology focuses on the \emph{pairwise} dataset --
+which are usually large enough for a statistically significant model.
 
 \subsection{Extending a landscape}
 \label{sec:extending-landscape}
 
-Clearly, modeling the pairwise SALI values leads to reasonable models
-the datasets discussed here. However, the primary goal of this
-approach is to extend the the structure-activity landscape for a set
-of molecules. In other words, can one use the model to identify
-compounds that will exhibit an activity cliff with one or more
-molecules in the dataset. Given a new molecule, one can evaluate the
-descriptors for this molecule and then evaluate the pairwise
-descriptor values with each member of the training set. Thus, given a
-new molecule, we must obtain predictions for $n$ ``pairwise objects'',
-where $n$ is the number of molecules in the training set. Given these
-$n$ predictions one can proceed to identify training set molecules
-with which the new molecule might exhibit a cliff.
+While predictive modeling of the SALI values is a first step, the primary goal of this approach is
+to extend the structure-activity landscape for a set of molecules. In other words, can one use
+the model to identify compounds that will exhibit an activity cliff with one or more molecules in
+the dataset? Given a new molecule, one can evaluate the descriptors for this molecule and then
+evaluate the pairwise descriptor values with each member of the training set. Thus, given a new
+molecule, we must obtain predictions for $n$ ``pairwise objects'', where $n$ is the number of
+molecules in the training set. Given these $n$ predictions one can proceed to identify training set
+molecules with which the new molecule might exhibit a cliff.
 
-We first performed this analysis with the Kalla dataset. Since
-predictions of new molecules involve $n$ predictions per molecule, we
-removed three molecules from the dataset and rebuilt the random
-forest model. The hold out molecules, were specifically selected since
-they displayed significant activity cliffs with various members of the
-training set. We then evaluted the pairwise descriptor values for
-these three with the training set molecules and obtained predictions
-of the log(SALI) values. Fig.~\ref{fig:tset-pset-kalla}A
-summarizes the performance of the model on the training set as well as
-for the prediction set. From a numerical point of view, the
-performance of the model on he prediction set degrades somewhat (RMSE
-of 0.51 versus 0.41 for the training set). As noted above, the
-variance of the prediction is higher at the lower scale of log(SALI)
-values. However, at the higher end of the scale there a number of
-pairs that are well predicted. Yet, it is clear that a number of
-relatively significant activity cliffs have been underestimated.
+We first performed this analysis with the Kalla dataset. Since predictions of new molecules involve
+$n$ predictions per molecule, we removed three molecules from the dataset and rebuilt the random
+forest model. The hold out molecules, were specifically selected since they displayed significant
+activity cliffs with various members of the training set. We then evaluated the pairwise descriptor
+values for these three with the training set molecules and obtained predictions of the log(SALI)
+values. Fig.~\ref{fig:tset-pset-kalla}A summarizes the performance of the model on the training set
+as well as for the prediction set. From a numerical point of view, the performance of the model on
+he prediction set degrades somewhat (RMSE of 0.51 versus 0.41 for the training set). As noted above,
+the variance of the prediction is higher at the lower scale of log(SALI) values. However, at the
+higher end of the scale there a number of pairs that are well predicted. Yet, it is clear that a
+number of relatively significant activity cliffs have been underestimated.
 
-Given that large SALI values can arise due to high structural
-similarity, even when the activity difference is small, simply
-examining log(SALI) values is not comletely informative. Specifically,
-we are interested in the predictions for the actual activity cliffs,
-where both the difference in activity and the structural similarity is
-very high. Fig.~\ref{fig:tset-pset-kalla}B visualizes this
-information. Each point coresponds to a pair of molecules, which are
-shaded by the absolute prediction residual for that pair. Thus, the
-``true'' cliffs are represented by points lying towards the bottom
-right corner of the plot. In this case we see that there are a number
-of pairs of molecules with $1 - T_C \leq 0.1$ and 100-fold or better
-difference in activity. While many of these pairs are associated with
-a high prediction residual, there are a number with low to medium
+Given that large SALI values can arise due to high structural similarity, even when the activity
+difference is small, simply examining log(SALI) values is not completely informative. Specifically,
+we are interested in the predictions for the actual activity cliffs, where both the difference in
+activity and the structural similarity is very high. Fig.~\ref{fig:tset-pset-kalla}B visualizes this
+information. Each point corresponds to a pair of molecules, which are shaded by the absolute
+prediction residual for that pair. Thus, the ``true'' cliffs are represented by points lying towards
+the bottom right corner of the plot. In this case we see that there are a number of pairs of
+molecules with $1 - T_C \leq 0.1$ and 100-fold or better difference in activity. While many of these
+pairs are associated with a high prediction residual, there are a number with low to medium
 residuals.
   
-Fig.~\ref{fig:kalla-comparison} displays the structures of the three
-hold out molecules (top row) and a selection of structures, which
-which these hold out molecules were predicted to exhibit an activity
-cliff. For each molecule, the $K_i$ value is listed along with the
-absoute residual value (log(SALI) units). For molecules
-\textbf{349288} and \textbf{349699}, the predicted cliffs are
-relatively accurate, as evidenced by the low residuals. For
-\textbf{349138} on the other hand, most of the residuals were were
-relatively high. While we have highlighted a number of cliffs,
-Fig.~\ref{fig:tset-pset-kalla}C makes it clear that the predictions
-for this molecule were, on average, worse than for the other two
-molecules.
+Fig.~\ref{fig:kalla-comparison} displays the structures of the three hold out molecules (top row)
+and a selection of structures, which which these hold out molecules were predicted to exhibit an
+activity cliff. For each molecule, the $K_i$ value is listed along with the absolute residual value
+(log(SALI) units). For molecules \textbf{349288} and \textbf{349699}, the predicted cliffs are
+relatively accurate, as evidenced by the low residuals. For \textbf{349138} on the other hand, most
+of the residuals were were relatively high. While we have highlighted a number of cliffs,
+Fig.~\ref{fig:tset-pset-kalla}C makes it clear that the predictions for this molecule were, on
+average, worse than for the other two molecules.
 
-Fig.~\ref{fig:tset-pset-dai} summarizes the results for the same set
-of analyzes described above, applied to the Dai dataset. As before we
-removed three molecules (top row of Fig.~\ref{fig:dai-comparison}) and
-rebuilt the random forest on the paired cases with the remaining 41
-molecules. We then predicted the pairwise SALI values for the three
-hold-out molecules with the remaining 41 molecules (i.e., the
-prediction set). A plot of the predicted versus observed log(SALI)
-values for the training and prediction sets are displayed in
-Fig.~\ref{fig:tset-pset-dai}A. As before the model performs poorly on
-the lesser cliffs, but improves for the more significant cliffs (RMSE
-for the training set and prediction sets were 0.37 and 0.43 log units
-respectively). However, the 2 most significant cliffs are
-under-estimated. However, in comparison to the Kalla dataset, the
+Fig.~\ref{fig:tset-pset-dai} summarizes the results for the same set of analyzes described above,
+applied to the Dai dataset. As before we removed three molecules (top row of
+Fig.~\ref{fig:dai-comparison}) and rebuilt the random forest on the paired cases with the remaining
+41 molecules. We then predicted the pairwise SALI values for the three hold-out molecules with the
+remaining 41 molecules (i.e., the prediction set). A plot of the predicted versus observed log(SALI)
+values for the training and prediction sets are displayed in Fig.~\ref{fig:tset-pset-dai}A. As
+before the model performs poorly on the lesser cliffs, but improves for the more significant cliffs
+(RMSE for the training set and prediction sets were 0.37 and 0.43 log units respectively). However,
+the 2 most significant cliffs are under-estimated. However, in comparison to the Kalla dataset, the
 distribution of absolute residuals aggregated by the hold-out molecule
-(Fig.~\ref{fig:tset-pset-dai}C) are reatively similar, with a median
-absolute residual of less than 0.3 log units.  For this dataset, the
-number of ``real'' cliffs is relatively low as shown in
-Fig.~\ref{fig:tset-pset-dai}B. Interestingly, the compound pairs that
-display moderate to significant cliffs are relatively well predicted -
-in fact, the maximum residuals are observed for the least significant
-cliffs.
+(Fig.~\ref{fig:tset-pset-dai}C) are similar, with a median absolute residual of less than
+0.3 log units.  For this dataset, the number of ``real'' cliffs is relatively low as shown in
+Fig.~\ref{fig:tset-pset-dai}B. Interestingly, the compound pairs that display moderate to
+significant cliffs are relatively well predicted - in fact, the maximum residuals are observed for
+the least significant cliffs.
 
-We then considered the three hold-out molecules and some of the members
-of the training set with which they are predicted to show activity
-cliffs. For this dataset, there are relatively few ``true'' activity
-cliffs. For example, while molecules
-\textbf{371259} and \textbf{371307} have a 1000-fold difference in
-activity, their $T_c = 0.68$, and would not represent a truly
-significant cliff. However, the pair is well poredicted with a
-residual of 0.04 log units. if we consider the subset of predictions
-where the $T_c \geq 0.8$ we note that the median absolute residual is
-0.24 log units. However, the activity differences are not always
-significant ranging from 1.1-fold to 13-fold. Two such examples are shown
-in Fig.~\ref{fig:dai-comparison}, where the only difference is in the
-position of the methyl substituent. Similar behavior is observed with
-the other hold-out molecules.  
+We then considered the three hold-out molecules and some of the members of the training set with
+which they are predicted to show activity cliffs. For this dataset, there are relatively few
+``true'' activity cliffs. For example, while molecules \textbf{371259} and \textbf{371307} have a
+1000-fold difference in activity, their $T_c = 0.68$, and would not represent a truly significant
+cliff. However, the pair is well predicted with a residual of 0.04 log units. if we consider the
+subset of predictions where the $T_c \geq 0.8$ we note that the median absolute residual is 0.24 log
+units. However, the activity differences are not always significant ranging from 1.1-fold to
+13-fold. Two such examples are shown in Fig.~\ref{fig:dai-comparison}, where the only difference is
+in the position of the methyl substituent. Similar behavior is observed with the other hold-out
+molecules.
 
 \section{Discussion}
 \label{sec:discussion}
 
-The results described above suggest that predicting pairwise SALI
-values is a useful way to identify whether a new molecule will
-form an activity cliff with one or more members of the training
-set. As with all QSAR models, one is limited by the nature of the
-underlying data, both in terms of accuracy as well as
-applicability. Thus while we have selected a few ChEMBL assays for the
-purposes of highlighting this approach, we have found that for some
-assays, the model built on pairwise data performs worse than the model
-built on the original data. Given that most of the datasets are small
-in size (less than 40 molecules), the poor performance of the initial
-model is not always surprising. However, in cases where the pairwise
-model does not exhibit improved performance, we believe that
-predictive modeling of activity cliffs in the original dataset will
-not be fruitful.
+The results described above suggest that predicting pairwise SALI values is a useful way to identify
+whether a new molecule will form an activity cliff with one or more members of the training set. As
+with all QSAR models, one is limited by the nature of the underlying data, both in terms of accuracy
+as well as applicability. Thus while we have selected a few ChEMBL assays for the purposes of
+highlighting this approach, we have found that for some assays, the model built on pairwise data
+performs worse than the model built on the original data. Given that most of the datasets are small
+in size (less than 40 molecules), the poor performance of the initial model is not always
+surprising. However, in cases where the pairwise model does not exhibit improved performance, we
+believe that predictive modeling of activity cliffs in the original dataset will not be fruitful.
 
-Given that many of the models show relatively poor statistics on the
-pairwise data, it is important to note that much of this is due to the
-large variance in the predictions for the less significant cliffs. One
-possible reason for the increase in variance for these portions of the
-dataset is the fact that the distribution of the log(SALI) values
-tends to be skewed to the right (Fig.~\ref{fig:logsalidist}). In
-general we see that the smaller SALI values constitute a relatively
+Given that many of the models show relatively poor statistics on the pairwise data, it is important
+to note that much of this is due to the large variance in the predictions for the less significant
+cliffs. One possible reason for the increase in variance for these portions of the dataset is the
+fact that the distribution of the log(SALI) values tends to be skewed to the right
+(Fig.~\ref{fig:logsalidist}). In general we see that the smaller SALI values constitute a relatively
 small portion of the dataset.
 
-Another factor affecting the models built on pairwise data is the
-descriptors that are employed. While the choice of initial descriptors
-is always open to debate, we partially avoid a biased selecion by
-employing a random forest model to perform implicit feature
-selection. However, given an initial set of descriptors we observe
-that the models are robust to the different aggregation functions to
-derive a pairwise descriptor representation from the descriptors for
-the individual compounds. This is a useful observation given that
-there appears to be no rule to select one aggregation function over
-another \emph{a priori}. While random forests do allow us to avoid
-feature selection, it is clear that other models, such as neural
-networks or support vector machines, could lead to more predictive
-solutions. At this stage, our aim is to highight the modeling
-procedure and we believe that the random forest allows us to highight
-the utility of this approach without sacrificing too much by way of
-predictive performance.
+Another factor affecting the models built on pairwise data is the descriptors that are
+employed. While the choice of initial descriptors is always open to debate, we partially avoid a
+biased selection by employing a random forest model to perform implicit feature selection. However,
+given an initial set of descriptors we observe that the models are robust to the different
+aggregation functions to derive a pairwise descriptor representation from the descriptors for the
+individual compounds. This is a useful observation given that there appears to be no rule to select
+one aggregation function over another \emph{a priori}. While random forests do allow us to avoid
+feature selection, it is clear that other models, such as neural networks or support vector
+machines, could lead to more predictive solutions. At this stage, our aim is to highlight the
+modeling procedure and we believe that the random forest allows us to highlight the utility of this
+approach without sacrificing too much by way of predictive performance.
 
-It is important to note that while the modeling approach here focuses
-on predicting SALI values rather than actual activities, one can
-obtain an idea of the latter based on the (known) activity of the
-training set molecules. Thus for a new molecule, predicted to show a
-cliff with a member of the training set, we can determine whether this
-molecule might be the potent member of the cliff, by noting whether
-the corresponding training set molecule is less or more potent. Given
-that one is usually interested in activity cliffs because of the
-possibility of increasing potency, this observation implies that for a
-collection of new molecules, one can prioritize them as being
-predicted to be more or less potent. From this point of view, the
-approach described here is more suited for prioritization, rather than
-prediction of absolute values.
+It is important to note that while the modeling approach here focuses on predicting SALI values
+rather than actual activities, one can obtain an idea of the latter based on the (known) activity of
+the training set molecules. Thus for a new molecule, predicted to show a cliff with a member of the
+training set, we can determine whether this molecule might be the potent member of the cliff, by
+noting whether the corresponding training set molecule is less or more potent. Given that one is
+usually interested in activity cliffs because of the possibility of increasing potency, this
+observation implies that for a collection of new molecules, one can prioritize them as being
+predicted to be more or less potent. From this point of view, the approach described here is more
+suited for prioritization, rather than prediction of absolute values.
 
 \section{Conclusions}
 \label{sec:conclusions}
 
-We have presented an approach to extending a structure-activity
-landscape in an indirect fashion, by predicting the propensity of a
-new molecule to exhibit an activity cliff with one or more molecules
-in a pre-exisiting SAR dataset. The method is based on building
-a model on pairwise SALI values (dependent variable) and pairwise
-aggregated descriptor values (independent variables). For a new
-molecule, we obtain $n$ pairwise SALI predictions (since we must
-estimate the SALI value for each training set molecule and the test
-molecule). The predicted SALI values can then be used to judge whether
-the new molecule will exhibit a cliff and whether such a cliff is in
-the desired direction (i.e., improving potency versus worsening
-potency). To test this strategy we have developed random forest modls
-to predict SALI values for several ChEMBL datasets. While the model
-performance statistics are not stellar, we observe that this is
-primarily due to high prediction variance at the lower range of SALI
-values. In contrast, the more significant cliffs are relatively well
-predicted, though, unsurprisingly, the most significant cliffs are not
-always well predicted. 
+We have presented an approach to extending a structure-activity landscape in an indirect fashion, by
+predicting the propensity of a new molecule to exhibit an activity cliff with one or more molecules
+in a pre-existing SAR dataset. The method is based on building a model on pairwise SALI values
+(dependent variable) and pairwise aggregated descriptor values (independent variables). For a new
+molecule, we obtain $n$ pairwise SALI predictions (since we must estimate the SALI value for each
+training set molecule and the test molecule). The predicted SALI values can then be used to judge
+whether the new molecule will exhibit a cliff and whether such a cliff is in the desired direction
+(i.e., improving potency versus worsening potency). To test this strategy we have developed random
+forest models to predict SALI values for several ChEMBL datasets. While the model performance
+statistics are not stellar, we observe that this is primarily due to high prediction variance at the
+lower range of SALI values. In contrast, the more significant cliffs are relatively well predicted,
+though, unsurprisingly, the most significant cliffs are not always well predicted.
 
-In summary, this approach extends the activity cliff concept, from
-that of a retrospective analysis tool to a prospective tool that could
-be used to guide synthetic campaigns in their goals of improved
-potency.
+In summary, this approach extends the activity cliff concept, from that of a retrospective analysis
+tool to a prospective tool that could be used to guide synthetic campaigns in their goals of
+improved potency.
 
 \clearpage
 \newpage

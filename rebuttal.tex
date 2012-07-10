@@ -59,15 +59,31 @@ Please rate the overall importance of this paper to the field of chemical inform
   references, and incomplete descriptions of methods and results.}
 
 The text has been thoroughly proof read to remove typos and incorrect grammar. References have been
-added and methods have been described more clearly.
+added and methods have been described more clearly. It's not clear which descriptions were
+incomplete. However, the methodology section now reads more coherently, and some aspects are now
+clearer based on other reviewer comments.
 
 \textbf{2.  Qualitative assessments of results are not acceptable.  The authors should give
   statistical evaluations and corresponding metrics for models and their predictions.}
+
+This was an oversight on our part. The use of qualitative terms has been removed and results and
+comparisons are quantitatively characterized. For example,  the random forest models built to
+predict SALI values are now compared to Y-scrambled models to ensure that the the results are not
+purely due to chance. 
 
 \textbf{3.  The tests sets are too small to make any meaningful conclusions.}
 
 \textbf{4.  SALI values needs to be determined for pairs of molecules - is that not the essence of
   the methodology?}
 
+Yes. For a given dataset, with measured activity values, one can indeed evaluate the SALI
+values. The proposed methodology takes these ``measured'' SALI values for a training set and then
+predicts the SALI values for a new molecule with each member of the training set. As with
+traditional QSAR models, a complete validation would require one to measure the activity of the new
+molecule and evaluate the actual SALI values. In absence of experimental activities for the test
+set, we resort to a training/test split.
+
 \textbf{5.  There is no discussion/direction of how to use the methodology in new applications.}
+
+
 \end{document}

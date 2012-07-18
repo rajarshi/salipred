@@ -212,13 +212,19 @@ with the descriptor pool (after removal of correlated and constant descriptors).
 is no reason, \emph{a priori} to assume that the underlying SAR's are linear. A random forest model,
 being an algorithmic approach\cite{Breiman:2001nx} (as opposed to a distributional one such as
 linear regression) makes no such assumptions. We employed the implementation of random forest from
-the \texttt{randomForest} package, in R 2.11.0\cite{r}, using the default settings.
+the \texttt{randomForest} package, in R 2.11.0\cite{r}. The models were built using 500 trees, and
+randomly sampled the descriptor pool for a given dataset, using $\sqrt(N)$ descriptors at a time,
+where $N$ is the number of descriptors in the pool. By default, the method builds individual trees
+using 63\% of the dataset and tested on the remainder (the so called out-of-bag data). The final
+predicted values for the entire dataset are obtained by averaging the predictions for each
+observation from from all 500 trees. We also investigated the traditional approach of a
+training/test set split
 
 In this work, we employed the CDK to evaluate 109 2D and constitutional descriptors for each
 individual molecule. For each dataset, we performed objective feature selection by removing
 descriptors with constant or near-constant values followed by removal of descriptors that are highly
 correlated with others (using an $R^2$ cutoff of 0.8). The sizes of the final descriptor pool for
-each dataset are summarized in Table \ref{tab:data}.
+each dataset are summarized in Table \ref{tab:data}. XXX
 
 A side effect of the proposed approach is that one can build relatively robust models for datasets of
 small size -- say, 20 molecules. Of course, a large training set is just one aspect of a reliable
@@ -291,13 +297,13 @@ which are usually large enough for a statistically significant model.
 \label{sec:extending-landscape}
 
 While predictive modeling of the SALI values is a first step, the primary goal of this approach is
-to extend the structure-activity landscape for a set of molecules. In other words, can one use
-the model to identify compounds that will exhibit an activity cliff with one or more molecules in
-the dataset? Given a new molecule, one can evaluate the descriptors for this molecule and then
-evaluate the pairwise descriptor values with each member of the training set. Thus, given a new
-molecule, we must obtain predictions for $n$ ``pairwise objects'', where $n$ is the number of
-molecules in the training set. Given these $n$ predictions one can proceed to identify training set
-molecules with which the new molecule might exhibit a cliff.
+to extend the structure-activity landscape for a set of molecules. In other words, can one use the
+model to identify compounds that will exhibit an activity cliff with one or more molecules in the
+dataset? Given a new molecule, one can evaluate the descriptors for this molecule and then evaluate
+the pairwise descriptor values with each member of the training set. Thus, given a new molecule, we
+must obtain predictions for $n$ ``pairwise objects'', where $n$ is the number of molecules in the
+training set. Given these $n$ predictions one can proceed to identify training set molecules with
+which the new molecule might exhibit a cliff.
 
 We first performed this analysis with the Kalla dataset. Since predictions of new molecules involve
 $n$ predictions per molecule, we removed three molecules from the dataset and rebuilt the random
@@ -364,7 +370,7 @@ molecules.
 The results described above suggest that predicting pairwise SALI values is a useful way to identify
 whether a new molecule will form an activity cliff with one or more members of the training set. As
 with all QSAR models, one is limited by the nature of the underlying data, both in terms of accuracy
-as well as applicability. Thus while we have selected a few ChEMBL assays for the purposes of
+as well as applicability. We have selected a few ChEMBL assays for the purposes of
 highlighting this approach, we have found that for some assays, the model built on pairwise data
 performs worse than the model built on the original data. Given that most of the datasets are small
 in size (less than 40 molecules), the poor performance of the initial model is not always
@@ -389,16 +395,6 @@ feature selection, it is clear that other models, such as neural networks or sup
 machines, could lead to more predictive solutions. At this stage, our aim is to highlight the
 modeling procedure and we believe that the random forest allows us to highlight the utility of this
 approach without sacrificing too much by way of predictive performance.
-
-It is important to note that while the modeling approach here focuses on predicting SALI values
-rather than actual activities, one can obtain an idea of the latter based on the (known) activity of
-the training set molecules. Thus for a new molecule, predicted to show a cliff with a member of the
-training set, we can determine whether this molecule might be the potent member of the cliff, by
-noting whether the corresponding training set molecule is less or more potent. Given that one is
-usually interested in activity cliffs because of the possibility of increasing potency, this
-observation implies that for a collection of new molecules, one can prioritize them as being
-predicted to be more or less potent. From this point of view, the approach described here is more
-suited for prioritization, rather than prediction of absolute values.
 
 \section{Conclusions}
 \label{sec:conclusions}

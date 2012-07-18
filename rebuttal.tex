@@ -20,27 +20,139 @@ prepared a revised manuscript that address the comments and my responses are det
 
 \fbox{\textbf{Reviewer: 1}}
 
-Recommendation: Publish after major revisions noted.
+\textbf{(1) Please, note that there are numerous typographical errors
+throughout the manuscript (which is quite disturbing). 
+\vskip 1em
+(2) Chosen methods and descriptors should at least be referenced. For
+example, no references are provided for BCI and CDK.}
 
-Comments:
-The prediction of activity cliffs is a nice idea that would further extend activity landscape modeling. This is attempted by predicting SALI values for compound pairs on the basis of training data. Unfortunately, there are a number of technical issues to note and, more importantly, methodological concerns that would need to be carefully addressed before publication of this study might be considered.  
+The manuscript has been thoroughly proof read and references included
+where appropriate
 
-First, a few general comments: 
-(1) Please, note that there are numerous typographical errors throughout the manuscript (which is quite disturbing). Unfortunately, the presentation of the work is sloppy at different levels.       
-(2) Chosen methods and descriptors should at least be referenced. For example, no references are provided for BCI and CDK.
 
-Second, there are shortcomings at the technical level:
-(3) The derivation of RF models is essentially not described (except of making reference to default parameters settings in R). It remains largely unclear how these models were developed. 
-(4) The selection of training and test sets should be clearly specified in the Methods section. For example, how were the RF models trained and evaluated for which predictions of pair-wise SALI values are reported in Figure 2? It is hoped that the reported SALI values were not predicted for the training data.
-(5) No support is provided for the assumption that the RF models “are relatively robust even for datasets of small size”. In fact, the author later on states several times that limited model quality might be due to the use of small compound sets. Appropriate validation will be essential here.
-(6) There is only limited statistical assessment/validation of the models. Statements made in the text that R2 values are “reasonable” and the models perform “relatively well” are difficult to reconcile. Rather, Table 2 indicates that the R2 values were rather poor in several instances.
-(7) It appears that there are systematic prediction errors for pairs. At low value ranges (that are not relevant for activity cliff assessment), SALI values are consistently over-predicted. By contrast, at high value ranges (that are relevant), SALI values are consistently under-predicted, in part significantly. This is not investigated, although the apparent errors at high value ranges are the perhaps most critical features of the reported RF models.    
-(8) In the section “Extending a landscape”, predictions are finally reported for only three (!) molecules taken out of each data set. Carefully put, the predictions are heterogeneous. On the basis of the results reported for this little bit of evaluation, one would be hard pressed to make a case for the ability of the approach to predict activity cliffs with any certainty.        
+\textbf{(3) The derivation of RF models is essentially not described
+  (except of making reference to default parameters settings in R). It
+  remains largely unclear how these models were developed. } 
 
-Third, there are major scientific concerns:
-(9) For the prediction of activity cliffs, SALI values must be calculated for compound pairs. This is the central idea of the approach. Accordingly, fingerprint descriptors and potency values must be combined in some ways. 
-(9.1.) It is nowhere stated how activity values are treated for compounds forming a pair. Are activity differences calculated at the pair level? If so, how are activity differences compared for the calculation of pair-based SALI scores - as a difference of differences? It should be noted predicted potency values in Figures 4-6 are essentially all over the place.
-(9.2.) To obtain a fingerprint descriptor for a pair, the author aggregates fingerprints of individual molecules, finally, by simple averaging. For comparisons of pairs, Tanimoto similarity is then calculated for averaged fingerprints, which presents an artificial assessment of pair similarity (one can easily come up with a few hypothetical compound similarity relationships that make this assessment questionable at best). As a consequence, activity cliffs are considered for which Tanimoto similarity calculations yield values between 0.2 and 0.3! Thus, on the basis of these similarity calculations, one could never decide which level of similarity might be cliff relevant. In this respect, the descriptions of activity cliff by the author are quite telling – he speaks of “predicted” versus “true” activity cliffs, of “relatively accurate” activity cliffs, and of “most significant activity cliffs that are in fact not very significant activity cliffs in an absolute sense”, and so on. 
+The text has been updated to be more specific on the development of
+the random forest model.
+
+(4) The
+selection of training and test sets should be clearly specified in the
+Methods section. For example, how were the RF models trained and
+evaluated for which predictions of pair-wise SALI values are reported
+in Figure 2? It is hoped that the reported SALI values were not
+predicted for the training data.  
+
+(5) No support is provided for the
+assumption that the RF models “are relatively robust even for datasets
+of small size”. In fact, the author later on states several times that
+limited model quality might be due to the use of small compound
+sets. Appropriate validation will be essential here.  
+
+(6) There is
+only limited statistical assessment/validation of the
+models. Statements made in the text that R2 values are “reasonable”
+and the models perform “relatively well” are difficult to
+reconcile. Rather, Table 2 indicates that the R2 values were rather
+poor in several instances. 
+
+ (7) It appears that there are systematic
+prediction errors for pairs. At low value ranges (that are not
+relevant for activity cliff assessment), SALI values are consistently
+over-predicted. By contrast, at high value ranges (that are relevant),
+SALI values are consistently under-predicted, in part
+significantly. This is not investigated, although the apparent errors
+at high value ranges are the perhaps most critical features of the
+reported RF models.  
+
+(8) In the section “Extending a landscape”,
+predictions are finally reported for only three (!) molecules taken
+out of each data set. Carefully put, the predictions are
+heterogeneous. On the basis of the results reported for this little
+bit of evaluation, one would be hard pressed to make a case for the
+ability of the approach to predict activity cliffs with any certainty.
+
+\textbf{(9) For the prediction of activity cliffs, SALI values must be
+calculated for compound pairs. This is the central idea of the
+approach. Accordingly, fingerprint descriptors and potency values must
+be combined in some ways. 
+\vskip 1em
+(9.1.) It is nowhere stated how activity values are treated for
+compounds forming a pair. Are activity differences calculated at the
+pair level? If so, how are activity differences compared for the
+calculation of pair-based SALI scores - as a difference of
+differences? It should be noted predicted potency values in Figures
+4-6 are essentially all over the place.
+}
+The entire premise of the proposed method is that one evaluates SALI
+values for a dataset that has observed activities. We state
+specifically (Equation 1) how the activities are combined when
+molecules are considered pairwise.
+
+It's not clear what the reviewer means by \emph{``\ldots how are
+  activity differences compared for the calculation of pair-based SALI
+  scores \ldots''}. The SALI value itself represents a pair of
+molecules and in this calculation, we consider the absolute activity
+difference. We do not consider pairs of pairs
+
+\textbf{(9.2.) To obtain a fingerprint descriptor for a pair, the
+  author aggregates fingerprints of individual molecules, finally, by
+  simple averaging}
+
+In fact, we do not generate pairwise fingerprint
+descriptors. Fingerprints are only used to evaluate the similarity
+term in the calculation of the SALI value.
+
+\textbf{ For comparisons of pairs, Tanimoto similarity is then
+  calculated for averaged fingerprints, which presents an artificial
+  assessment of pair similarity (one can easily come up with a few
+  hypothetical compound similarity relationships that make this
+  assessment questionable at best). As a consequence, activity cliffs
+  are considered for which Tanimoto similarity calculations yield
+  values between 0.2 and 0.3!}
+
+I believe that these comments are based on the discussion in Section
+3.1 and it appears that this section of the paper was not clear.
+
+Firstly, we have never mentioned the averaging of fingerprint
+descriptors. Instead, we generate a descriptor vector for a pair of
+molecules by averaging the (topological) descriptor vectors of the
+individual members of that pair.
+
+The goal of Section 3.1 is to indicate that even though the Y variable
+and the X variables encode structural information (the former
+indirectly and the latter directly), there is little correlation
+between the individual (aggregated, topological) descriptors and the Y
+variable (where sructural information is included via
+fingerprints). To quantify this, we evaluate the Pearson correlation
+between each (aggregated, topological) descriptor and the Y variable
+and show that the maximum value is very low ($R^2 < 0.15$). 
+
+This discussion does not involve Tanimoto similarities at all
+
+ Thus, on the basis of these similarity calculations, one could never
+ decide which level of similarity might be cliff relevant.
+
+\textbf{ In this
+ respect, the descriptions of activity cliff by the author are quite
+ telling – he speaks of “predicted” versus “true” activity cliffs, of
+ “relatively accurate” activity cliffs, and of “most significant
+ activity cliffs that are in fact not very significant activity cliffs
+ in an absolute sense”, and so on. }
+
+I agree that the wording of this discussion is rather sloppy. The text
+has been updated to be more quantitative. 
+
+Yet at the same time, the concept of an activity cliff is somewhat
+subjective. In many cases, it is akin to saying \emph{``I'll know it's
+  an activity cliff when I see it''}. For example, a pair of molecules
+exhibiting a $T_c = 0.9$ and 1000x difference in acivity is obviously
+an activity clif. Would a pair with $T_C = 0.85$ and 50x difference in
+activity not be an activity cliff? From this point of view, I do not
+think it unreasonable to refer somewhat qualitatively to the
+``cliffness'' of an activity cliff.
+
 Furthermore, there might be many instances of activity and fingerprint similarity relationships between pairs of compounds that might yield high pair-based SALI scores dominated by either the activity or similarity component, without forming a “true” activity cliff. The conclusion of this reviewer is that it is currently not possible to capture activity cliffs with any degree of certainty on the basis of the pair calculations, as reported.
 (10) It also remains largely obscure how an activity landscape should be extended following this approach by compounds for which no activity information is available. Should the activity first be predicted by an RF model and then used for pair-based SALI score calculations? One would hope not.
 
@@ -76,14 +188,19 @@ purely due to chance.
 \textbf{4.  SALI values needs to be determined for pairs of molecules - is that not the essence of
   the methodology?}
 
-Yes. For a given dataset, with measured activity values, one can indeed evaluate the SALI
-values. The proposed methodology takes these ``measured'' SALI values for a training set and then
-predicts the SALI values for a new molecule with each member of the training set. As with
-traditional QSAR models, a complete validation would require one to measure the activity of the new
-molecule and evaluate the actual SALI values. In absence of experimental activities for the test
-set, we resort to a training/test split.
+Yes. For a given dataset, with measured activity values, one can
+indeed evaluate the SALI values. The proposed methodology takes these
+``measured'' SALI values for a training set and then predicts the SALI
+values for a new molecule with each member of the training set. As
+with traditional QSAR models, a complete validation would require one
+to measure the activity of the new molecule and evaluate the actual
+SALI values. In absence of experimental activities for the test set,
+we resort to a training/test split, which is an accepted approach in
+QSAR modeling.
 
 \textbf{5.  There is no discussion/direction of how to use the methodology in new applications.}
 
+Section 4.1 in the original manuscript specifically addresses how one
+might use the proposed methodology 
 
 \end{document}

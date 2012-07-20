@@ -104,6 +104,9 @@ This discussion does not involve fingerprint-based Tanimoto similarities at all.
 does indeed consider the pairwise Tanimoto values of the molecules within a dataset, we do in fact
 observe an appreciable number of pairs wth $T_c > 0.8$.
 
+In refering to pairs with $T_C$ values between 0.2 and 0.3 -- it is true that such pairs are not
+really activity cliffs in the original sense of the term. As described below, defining a threshold
+SALI, above which a pair represents an activity cliff, is rather subjective. 
 
 \textbf{Thus, on the basis of these similarity calculations, one could never decide which level of
   similarity might be cliff relevant. In this respect, the descriptions of activity cliff by the
@@ -111,15 +114,21 @@ observe an appreciable number of pairs wth $T_c > 0.8$.
   accurate” activity cliffs, and of “most significant activity cliffs that are in fact not very
   significant activity cliffs in an absolute sense”, and so on. }
 
-I agree that the wording of this discussion is rather sloppy. The text has been updated to be more
+I agree that the wording of this discussion is somewhat sloppy. The text has been updated to be more
 quantitative.
 
-Yet at the same time, the concept of an activity cliff is somewhat subjective. In many cases, it is
+Yet at the same time, the concept of an activity cliff is subjective. In many cases, it is
 akin to saying \emph{``I'll know it's an activity cliff when I see it''}. For example, a pair of
 molecules exhibiting a $T_c = 0.9$ and 1000x difference in acivity is obviously an activity
 clif. Would a pair with $T_C = 0.85$ and 50x difference in activity not be an activity cliff? From
 this point of view, I do not think it unreasonable to refer somewhat qualitatively to the
 ``cliffness'' of an activity cliff.
+
+Certainly, with respect to the previous comment, a pair of molecules with $T_c = 0.29$ would likely
+not be regarded as a cliff - I specifically note that such a case is not a significant cliff. To
+address this aspect of SALI values, I have presented plots of dissimilarity versus activity ratio
+(Figures 7 and 9) which allow one to more directly determine ``significant'' versus
+``insignificant'' cliffs.
 
 \textbf{Furthermore, there might be many instances of activity and fingerprint similarity
   relationships between pairs of compounds that might yield high pair-based SALI scores dominated by
@@ -132,12 +141,12 @@ this point of view, I do not think it unreasonable to refer somewhat qualitative
   first be predicted by an RF model and then used for pair-based SALI score calculations?  One would
   hope not.}
 
-The initial description was in misleading. In fact, the approach does not allow one to obtain
+The original description was misleading. In fact, the approach does not allow one to obtain
 predicted activity values, due to the fact that the sign of the difference in activities in the SALI
 formula is ignored. While one could create another model in parallel, that predicts signed activity
 differences (and thereby determine whether the activity derived from the predicted SALI value should
 be less than or greater than that of the molecule with observed activity), this would probably not
-be very reliable. The manuscript has been updated to remove the dicussion on extending SAR
+be very reliable! The manuscript has been updated to remove the dicussion on extending SAR
 landscapes.
 
 \fbox{\textbf{Reviewer: 2}}

@@ -271,7 +271,10 @@ for the three pairs are just 0.2, 0.30 and 0.29, though the activity differences
 We observed that the performance of models based on geometric mean aggregation function did not
 differ substantially from those built with the arithmetic mean. This was also true of the other
 datasets and so the following discussion omits the results obtained when using
-$f_{\textrm{geom}}$. Fig.~\ref{fig:rfmodel-chembl} summarizes the models built on the ChEMBL
+$f_{\textrm{geom}}$. In fact, a paired $t$-test between the predicted SALI values using models built
+with the different aggregation functions (i.e., $f_{\textrm{mean}}$ vs $f_{\textrm{absdiff}}$, etc.)
+indicated that the differences between the sets of predictions was statistically insignificant (all
+$p$-values $> 0.1$). Fig.~\ref{fig:rfmodel-chembl} summarizes the models built on the ChEMBL
 datasets using $f_{\textrm{diff}}$ and $f_{\textrm{mean}}$ as the aggregation functions. Table
 \ref{tab:rfmodel-results} reports the model statistics.  While the differences in model performance
 do not vary significantly with the aggregation function used, we see that for the Costanzo and Kalla
@@ -279,29 +282,27 @@ datasets, $f_{\textrm{diff}}$ leads to a slightly better model in terms of RMSE 
 using $f_{\textrm{mean}}$.
 
 
-Given the relatively small differences between models based on different aggregation functions, we
-arbitrarily chose $f_{\textrm{mean}}$ as the aggregation function for subsequent
-analyses. Figs.~\ref{fig:costanzo-pred}, \ref{fig:kalla-pred} and \ref{fig:dai-pred} summarize the
-performance of the models built using the reported activity data and the pairwise SALI values for
-the Costanzo, Kalla and Dai datasets, respectively. As with the Cavalli dataset, the SALI models
-exhibit more variance for small SALI values (i.e., less significant cliffs) but appear to perform
-better at the higher end of the SALI values. However in all three cases, the most significant cliffs
-exhibit significant variance. In comparison, the models developed on the reported activity values
-are relatively poor. This can be partially ascribed to the small sizes of the dataset. It should be
-note that this methodology is not aimed at modeling the original, usually small, SAR dataset. It is
-well known (and evident from the current analyses) that small datasets do not lead to very robust or
-reliable machine learning models. Instead, the methodology focuses on the \emph{pairwise} dataset --
-which are usually large enough for a statistically significant model.
+Given this observation, we arbitrarily chose $f_{\textrm{mean}}$ as the aggregation function
+for subsequent analyses. Figs.~\ref{fig:costanzo-pred}, \ref{fig:kalla-pred} and \ref{fig:dai-pred}
+summarize the performance of the models built using the reported activity data and the pairwise SALI
+values for the Costanzo, Kalla and Dai datasets, respectively. As with the Cavalli dataset, the SALI
+models exhibit more variance for small SALI values (i.e., less significant cliffs) but appear to
+perform better at the higher end of the SALI values. However in all three cases, the most
+significant cliffs exhibit significant variance. In comparison, the models developed on the reported
+activity values are relatively poor. This can be partially ascribed to the small sizes of the
+dataset. It should be note that this methodology is not aimed at modeling the original, usually
+small, SAR dataset. It is well known (and evident from the current analyses) that small datasets do
+not lead to very robust or reliable machine learning models. Instead, the methodology focuses on the
+\emph{pairwise} dataset -- which are usually large enough for a statistically significant model.
 
-
-While predictive modeling of the SALI values is a first step, the primary goal of this approach is
-to extend the structure-activity landscape for a set of molecules. In other words, can one use the
-model to identify compounds that will exhibit an activity cliff with one or more molecules in the
-dataset? Given a new molecule, one can evaluate the descriptors for this molecule and then evaluate
-the pairwise descriptor values with each member of the training set. Thus, given a new molecule, we
-must obtain predictions for $n$ ``pairwise objects'', where $n$ is the number of molecules in the
-training set. Given these $n$ predictions one can proceed to identify training set molecules with
-which the new molecule might exhibit a cliff.
+Since the model is built on pairs of observations, performance measures characterizing the model are
+based on the accuracy of pairwise SALI values. The model can also be tested in a slightly different
+approach by checking whether it can correctly identify cliffs between a new molecule and the member
+of the training set. To test this, we consider the original set of $n$ individual molecules and hold out
+$m$ molecules (as opposed to holding out a set of observations from the pairwise dataset). We then
+evaluate the SALI values $(n-m)(n-m-1)/2$ pairs of molecules and develop a random forest model. The
+model is then used to predict the SALI values between the $m$ holdout molecules and the $(n-m)$
+remaining molecules. 
 
 We first performed this analysis with the Kalla dataset. Since predictions of new molecules involve
 $n$ predictions per molecule, we removed three molecules from the dataset and rebuilt the random

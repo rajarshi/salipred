@@ -132,16 +132,13 @@ this point of view, I do not think it unreasonable to refer somewhat qualitative
   first be predicted by an RF model and then used for pair-based SALI score calculations?  One would
   hope not.}
 
-The initial description was actually misleading. The prediction of SALI values permits us to first
-extend the SALI matrix. As correctly noted by the reviewer, this does not lead to an extension of
-the structure-activity landscape. In the proposed methodology, the SALI value for a new molecule is
-always predicted \emph{with respect to} another molecule whose activity is known. Thus, given a
-predicted SALI value, one can rearrange Equation 1 to obtain a ``predicted'' activity value for the
-test molecule. This value can be used to extend the original landscape. The text has been updated to
-discuss this correctly XXX
-
-Of course, if one predicts a SALI value for a pair of molecules, in which both members have an
-unknown actvity, one cannot extend the landscape. 
+The initial description was in misleading. In fact, the approach does not allow one to obtain
+predicted activity values, due to the fact that the sign of the difference in activities in the SALI
+formula is ignored. While one could create another model in parallel, that predicts signed activity
+differences (and thereby determine whether the activity derived from the predicted SALI value should
+be less than or greater than that of the molecule with observed activity), this would probably not
+be very reliable. The manuscript has been updated to remove the dicussion on extending SAR
+landscapes.
 
 \fbox{\textbf{Reviewer: 2}}
 

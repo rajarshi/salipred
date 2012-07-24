@@ -14,8 +14,8 @@
 
 \begin{document}
 
-I would like to thank the reviewers for their thorough comments on the original submissions. I have
-prepared a revised manuscript that address the comments and my responses are detailed below.
+I would like to thank the reviewers for their comments on the original submissions. I have prepared
+a revised manuscript that address the comments and my responses are detailed below.
 
 \fbox{\textbf{Reviewer: 1}}
 
@@ -24,7 +24,6 @@ prepared a revised manuscript that address the comments and my responses are det
   referenced. For example, no references are provided for BCI and CDK.}
 
 The manuscript has been thoroughly proof read and references included where appropriate
-
 
 \textbf{(3) The derivation of RF models is essentially not described (except of making reference to
   default parameters settings in R). It remains largely unclear how these models were developed. }
@@ -41,9 +40,11 @@ datasets of small size”. In fact, the author later on states several times tha
 quality might be due to the use of small compound sets. Appropriate validation will be essential
 here.
 
-(6) There is only limited statistical assessment/validation of the models. Statements made in the
+\textbf{(6) There is only limited statistical assessment/validation of the models. Statements made in the
 text that R2 values are “reasonable” and the models perform “relatively well” are difficult to
-reconcile. Rather, Table 2 indicates that the R2 values were rather poor in several instances.
+reconcile. Rather, Table 2 indicates that the R2 values were rather poor in several instances.}
+
+The text has been updated to read more quantitatively and avoid ambiguous statements
 
 (7) It appears that there are systematic prediction errors for pairs. At low value ranges (that are
 not relevant for activity cliff assessment), SALI values are consistently over-predicted. By
@@ -135,6 +136,12 @@ address this aspect of SALI values, I have presented plots of dissimilarity vers
   either the activity or similarity component, without forming a “true” activity cliff. The
   conclusion of this reviewer is that it is currently not possible to capture activity cliffs with
   any degree of certainty on the basis of the pair calculations, as reported.}
+
+While it is true that the SALI definition itself allows for high SALI values to be generated for
+pairs of molecules that would be small/insignificant cliffs (highly similar structures with small
+difference in activity), the methodology does let one rank pairs of molecules and as indicated in
+Figures 7 and 9, one can compare the strucural similarity and activity difference (or ratio) in 2D,
+allowing one to separate ``true'' cliffs from apparent ones.
 
 \textbf{(10) It also remains largely obscure how an activity landscape should be extended following
   this approach by compounds for which no activity information is available. Should the activity

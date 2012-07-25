@@ -218,13 +218,14 @@ where $N$ is the number of descriptors in the pool. By default, the method build
 using 63\% of the dataset and tested on the remainder (the so called out-of-bag data). The final
 predicted values for the entire dataset are obtained by averaging the predictions for each
 observation from from all 500 trees. We also investigated the traditional approach of a
-training/test set split
+training/test set split (80\% of the dataset was assigned to the training set) and the results were
+similar. As a result, the remainder of this work employed models built using the entire dataset.
 
 In this work, we employed the CDK to evaluate 109 2D and constitutional descriptors for each
 individual molecule. For each dataset, we performed objective feature selection by removing
 descriptors with constant or near-constant values followed by removal of descriptors that are highly
-correlated with others (using an $R^2$ cutoff of 0.8). The sizes of the final descriptor pool for
-each dataset are summarized in Table \ref{tab:data}. XXX
+correlated with others (using an $R^2$ cutoff of 0.8). The sizes ($N_{desc}$) of the final
+descriptor pool for each dataset are summarized in Table \ref{tab:data}.
 
 A side effect of the proposed approach is that one can build relatively robust models for datasets of
 small size -- say, 20 molecules. Of course, a large training set is just one aspect of a reliable
@@ -424,17 +425,17 @@ improved potency.
 
 \ctable[cap={}, caption={Datasets considered in this study.},
 label={tab:data}]
-{lp{0.4\textwidth}rrrr}
+{lp{0.3\textwidth}rrrrr}
 {}
 {\FL
-Name & Description & Endpoint & ChEMBL AID & Size & Reference
+Name & Description & Endpoint & ChEMBL AID & Size & $N_{desc}$ & Reference
 \ML
-Cavalli & \raggedright{Putative hERG inhibitors (via pharmacophore modeling)} & Score &  & 30 & Ref.~\citen{Cavalli:2002aa} \NN
-Costanzo & \raggedright{Thrombin inhibitors} & $\mathrm{IC_{50}}$ & 305283 & 60 &
+Cavalli & \raggedright{Putative hERG inhibitors (via pharmacophore modeling)} & pIC$_{50}$ &  & 30 & 40 &  Ref.~\citen{Cavalli:2002aa} \NN
+Costanzo & \raggedright{Thrombin inhibitors} & $\mathrm{IC_{50}}$ & 305283 & 60 & 21 & 
 Ref.~\citen{Costanzo:2005uq} \NN
 Kalla & \raggedright{A2B adenosine receptor antagonists} & $K_i$ &
-364155 & 38 & Ref.~\citen{Kalla:2006kx} \NN
-Dai & \raggedright{RTK inhibitors} & $K_i$ & 429056 & 44 & Ref.~\citen{Dai:2007kl}
+364155 & 38 & 10 & Ref.~\citen{Kalla:2006kx} \NN
+Dai & \raggedright{RTK inhibitors} & $K_i$ & 429056 & 44 & 12 & Ref.~\citen{Dai:2007kl}
 % Mewshaw & \raggedright{ER$\beta$ inhibitors} & $\mathrm{IC_{50}}$ &
 % 306229 & 70 & \cite{Mewshaw:2005vf} \NN
 \LL}

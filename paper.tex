@@ -424,7 +424,9 @@ improved potency.
 
 \newpage
 
-\ctable[cap={}, caption={Datasets considered in this study.},
+\ctable[cap={}, caption={Datasets considered in this study. $N_{desc}$ is the number of descriptors
+  for the dataset after removal of correlated and low-variance descriptors from the original pool of
+109 descriptors.},
 label={tab:data}]
 {lp{0.3\textwidth}rrrrr}
 {}
@@ -459,12 +461,15 @@ Dataset & Y-range\tmark & Aggregation Function & RMSE & $R^2$ & RMSE & $R^2$
 Cavalli & 7.21 & $f_{\textrm{diff}}$ & 1.16& 0.54 & 1.07& 0.56\NN
         & & $f_{\textrm{mean}}$      & 1.03& 0.64 & 1.01& 0.58\NN
         & & $f_{\textrm{geom}}$      & 1.07& 0.61 & 1.01& 0.59\NN \NN
-Costanzo & 288.03& $f_{\textrm{diff}}$ & 12.88& 0.24 & & \NN
-       & & $f_{\textrm{mean}}$ & 13.56& 0.17 & & \NN \NN
-Kalla & 88.25 & $f_{\textrm{diff}}$ & 7.51& 0.62 & & \NN
-      &  & $f_{\textrm{mean}}$ & 8.26& 0.53  & & \NN \NN
-Dai & 32.71 & $f_{\textrm{diff}}$ & 2.60& 0.44 & & \NN
-     &   & $f_{\textrm{mean}}$ & 2.67& 0.41  & & 
+%%
+Costanzo & 288.03& $f_{\textrm{diff}}$ & 11.99& 0.24 & 17.97& 0.10 \NN
+       & & $f_{\textrm{mean}}$         & 12.88& 0.12 & 16.96& 0.20\NN \NN
+%%
+Kalla & 88.25 & $f_{\textrm{diff}}$ & 8.12& 0.59 & 6.49& 0.57\NN
+      &  & $f_{\textrm{mean}}$      & 8.79& 0.52 & 8.00& 0.47\NN \NN
+%%
+Dai & 32.71 & $f_{\textrm{diff}}$ & 2.49& 0.48 & 3.21& 0.22\NN
+     &   & $f_{\textrm{mean}}$    & 2.64& 0.41 & 2.86& 0.37
 \LL
 }
 

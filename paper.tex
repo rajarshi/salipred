@@ -311,26 +311,35 @@ holding out pairs of observations and evaluating the RMSE and $R^2$ for the pred
 these held out pairs.
 
 The model can also be tested in a slightly different approach by checking whether it can correctly
-identify cliffs between a new molecule and the member of the training set. In fact, such a scenario
+identify cliffs between a new molecule and the members of the training set. In fact, such a scenario
 would be the anticipated, prospective use case for such a modeling methodology. To test this, we
 consider the original set of $n$ individual molecules in a dataset and hold out $m$ molecules (as
 opposed to holding out a set of observations from the pairwise dataset). We then evaluate the SALI
 values $(n-m)(n-m-1)/2$ pairs of molecules and develop a random forest model. In contrast to the
 models previously described, we rebuilt these models using the entire set of $n$ molecules. The
 model is then used to predict the SALI values between the $m$ holdout molecules and the $(n-m)$
-remaining molecules.
+remaining molecules. As a result, instead of a just $m$ predicted values, we obtain $m \times (n-m)$
+predicted values for the test set.
 
 We first performed this analysis with the Kalla dataset. Since predictions of new molecules involve
-$n$ predictions per molecule, we removed three molecules from the dataset and rebuilt the random
-forest model. The hold out molecules, were specifically selected since they displayed significant
-activity cliffs with various members of the training set. We then evaluated the pairwise descriptor
-values for these three with the training set molecules and obtained predictions of the log(SALI)
-values. Figure \ref{fig:tset-pset-kalla}A summarizes the performance of the model on the training set
-as well as for the prediction set. From a numerical point of view, the performance of the model on
-he prediction set degrades somewhat (RMSE of 0.51 versus 0.41 for the training set). As noted above,
-the variance of the prediction is higher at the lower scale of log(SALI) values. However, at the
-higher end of the scale there a number of pairs that are well predicted. Yet, it is clear that a
-number of relatively significant activity cliffs have been underestimated.
+$n$ predictions per molecule, we removed ten molecules from the original dataset and rebuilt the
+random forest model. The hold out molecules included cases that displayed significant activity
+cliffs with various members of the training set, as well as other cases that did not really exhibit
+cliffs with any member of the training set. We then evaluated the pairwise descriptor values for
+these ten molecules with the training set molecules and obtained predictions of the log(SALI)
+values. Figure \ref{fig:tset-pset-kalla}A summarizes the performance of the model on the training
+set as well as for the prediction set. From a numerical point of view, the performance of the model
+on the prediction set degrades somewhat (RMSE of 0.41 versus 0.63 for the training set). As noted
+above, the variance of the prediction is higher at the lower scale of log(SALI) values. This is
+highlighted in Figure \ref{fig:sali-pred-variance}, where we divided the observed log SALI values
+into three groups, \emph{low}, \emph{medium} and \emph{high} (based on the quartiles of the values)
+and aggregated the prediction residuals for the observations belonging to each group. Clearly, for
+lower SALI values (i.e., less significant cliffs), the prediction errors are larger and more widely
+distributed. While \ref{fig:tset-pset-kalla}A indicates that a number of the more significant
+activity cliffs are quite well predicted, Figure \ref{fig:sali-pred-variance} indicates that as a
+group the observations with higher log SALI values tend to exhibit a small range of non-zero
+residual errors. However it is clear from the scatter plot that number of relatively significant
+activity cliffs have been underestimated.
 
 Given that large SALI values can arise due to high structural similarity, even when the activity
 difference is small, simply examining log(SALI) values is not completely informative. Specifically,
@@ -343,7 +352,7 @@ molecules with $1 - T_C \leq 0.1$ and 100-fold or better difference in activity.
 pairs are associated with a high prediction residual, there are a number with low to medium
 residuals.
   
-Figure \ref{fig:kalla-comparison} displays the structures of the three hold out molecules (top row)
+Figure \ref{fig:kalla-comparison} displays the structures of three hold out molecules (top row)
 and a selection of structures, which which these hold out molecules were predicted to exhibit an
 activity cliff. For each molecule, the $K_i$ value is listed along with the absolute residual value
 (log(SALI) units). For molecules \textbf{349288} and \textbf{349699}, the predicted cliffs are
@@ -353,31 +362,32 @@ Figure \ref{fig:tset-pset-kalla}C makes it clear that the predictions for this m
 average, worse than for the other two molecules.
 
 Figure \ref{fig:tset-pset-dai} summarizes the results for the same set of analyzes described above,
-applied to the Dai dataset. As before we removed three molecules (top row of
-Figure \ref{fig:dai-comparison}) and rebuilt the random forest on the paired cases with the remaining
-41 molecules. We then predicted the pairwise SALI values for the three hold-out molecules with the
-remaining 41 molecules (i.e., the prediction set). A plot of the predicted versus observed log(SALI)
-values for the training and prediction sets are displayed in Figure \ref{fig:tset-pset-dai}A. As
-before the model performs poorly on the lesser cliffs, but improves for the more significant cliffs
-(RMSE for the training set and prediction sets were 0.37 and 0.43 log units respectively). However,
-the 2 most significant cliffs are under-estimated. However, in comparison to the Kalla dataset, the
-distribution of absolute residuals aggregated by the hold-out molecule
-(Figure \ref{fig:tset-pset-dai}C) are similar, with a median absolute residual of less than
-0.3 log units.  For this dataset, the number of ``real'' cliffs is relatively low as shown in
-Figure \ref{fig:tset-pset-dai}B. Interestingly, the compound pairs that display moderate to
-significant cliffs are relatively well predicted - in fact, the maximum residuals are observed for
-the least significant cliffs.
+applied to the Dai dataset. As before we removed ten molecules (top row of Figure
+\ref{fig:dai-comparison}) and rebuilt the random forest on the paired cases with the remaining 34
+molecules. We then predicted the pairwise SALI values for the ten hold-out molecules with the
+remaining 34 molecules. A plot of the predicted versus observed log(SALI) values for the training
+and prediction sets are displayed in Figure \ref{fig:tset-pset-dai}A. As before the model performs
+poorly on the lesser cliffs, but improves for the more significant cliffs (RMSE for the training set
+and prediction sets were 0.37 and 0.43 log units respectively). Figure \ref{fig:sali-pred-variance}
+also highlights the fact that the model performs poorly at the lower end of the log(SALI)
+spectrum. However, the 2 most significant cliffs are under-estimated. However, in comparison to the
+Kalla dataset, the distribution of absolute residuals aggregated by the hold-out molecule (Figure
+\ref{fig:tset-pset-dai}C) are similar, with a median absolute residual of less than 0.3 log units.
+For this dataset, the number of ``real'' cliffs is relatively low as shown in Figure
+\ref{fig:tset-pset-dai}B. Interestingly, the compound pairs that display moderate to significant
+cliffs are relatively well predicted - in fact, the maximum residuals are observed for the least
+significant cliffs.
 
-We then considered the three hold-out molecules and some of the members of the training set with
+We then considered three of hold-out molecules and some of the members of the training set with
 which they are predicted to show activity cliffs. For this dataset, there are relatively few
 ``true'' activity cliffs. For example, while molecules \textbf{371259} and \textbf{371307} have a
 1000-fold difference in activity, their $T_c = 0.68$, and would not represent a truly significant
 cliff. However, the pair is well predicted with a residual of 0.04 log units. if we consider the
 subset of predictions where the $T_c \geq 0.8$ we note that the median absolute residual is 0.24 log
-units. However, the activity differences are not always significant ranging from 1.1-fold to
-13-fold. Two such examples are shown in Figure \ref{fig:dai-comparison}, where the only difference is
-in the position of the methyl substituent. Similar behavior is observed with the other hold-out
-molecules.
+units. However, the activity differences are not always very large ranging from 1.1-fold to
+13-fold. Two such examples are shown in Figure \ref{fig:dai-comparison}, where the only difference
+is in the position of the methyl substituent (\textbf{371259} and \textbf{371224}). Similar behavior
+is observed with the other hold-out molecules.
 
 \section{Discussion}
 \label{sec:discussion}
@@ -561,6 +571,18 @@ label={fig:tset-pset-kalla}, figure, botcap]
 {c}
 {}
 {\includegraphics[width=\linewidth]{tset-pset-kalla}}      
+
+\ctable[cap={}, caption={A summary of the prediction residuals for log(SALI) values, grouped by
+  whether the actual log(SALI) value for that observation was \emph{low}, \emph{medium} or
+  \emph{high}. The grouping is based on  the quartiles of the observed values.}, figure, botcap,
+label={fig:sali-pred-variance}]    
+{cc}
+{}
+{\textbf{Kalla} & \textbf{Dai}  \NN
+\includegraphics[width=0.5\linewidth]{sali-pred-variance-kalla} & 
+\includegraphics[width=0.5\linewidth]{sali-pred-variance-dai}
+}
+
 
 \ctable[cap={}, caption={Three of the hold out molecules for the Kalla dataset
   and training set members with which the hold outs exhibit predicted

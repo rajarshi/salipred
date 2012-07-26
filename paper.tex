@@ -217,10 +217,12 @@ the \texttt{randomForest} package, in R 2.11.0\cite{r}. The models were built us
 randomly sampled the descriptor pool for a given dataset, using $\sqrt(N)$ descriptors at a time,
 where $N$ is the number of descriptors in the pool. By default, the method builds individual trees
 using 63\% of the dataset and tested on the remainder (the so called out-of-bag data). The final
-predicted values for the entire dataset are obtained by averaging the predictions for each
-observation from from all 500 trees. We initially employed a
-training/test set split (80\% of the dataset was assigned to the training set) and these results are
-reported in Table \ref{tab:data}.
+predicted values are obtained by averaging the predictions for each observation from from all 500
+trees. We initially employed a training/test set split (80\% of the dataset was assigned to the
+training set) and these results are reported in Table \ref{tab:rfmodel-results}. We also developed
+models (Section \ref{sec:an-altern-valid} using the entire dataset and observed similar RMSE and
+$R^2$ values. Given the fact that the random forest algorithm builds a model based on out-of-bag
+data, using the entire dataset rather than a single training/test split this is not surprising.
 
 In this work, we employed the CDK to evaluate 109 2D and constitutional descriptors for each
 individual molecule. For each dataset, we performed objective feature selection by removing
@@ -281,30 +283,34 @@ statistically insignificant (all $p$-values $> 0.1$). Fig.~\ref{fig:rfmodel-chem
 models built on the ChEMBL datasets using $f_{\textrm{diff}}$ and $f_{\textrm{mean}}$ as the
 aggregation functions. Table \ref{tab:rfmodel-results} reports the model statistics.  While the
 differences in model performance do not vary significantly with the aggregation function used, we
-see that for all the ChEMBL datasets, $f_{\textrm{diff}}$ leads to a slightly better model
-in terms of RMSE and $R^2$ than when using $f_{\textrm{mean}}$.
-
-Given this observation, we arbitrarily chose $f_{\textrm{diff}}$ as the aggregation function
-for subsequent analyses. Figs.~\ref{fig:costanzo-pred}, \ref{fig:kalla-pred} and \ref{fig:dai-pred}
-summarize the performance of the models built using the reported activity data and the pairwise SALI
-values for the Costanzo, Kalla and Dai datasets, respectively. As with the Cavalli dataset, the SALI
-models exhibit more variance for small SALI values (i.e., less significant cliffs) but appear to
-perform better at the higher end of the SALI values. However in all three cases, the most
-significant cliffs exhibit significant variance. In comparison, the models developed on the reported
-activity values are relatively poor. This can be partially ascribed to the small sizes of the
-dataset. It should be note that this methodology is not aimed at modeling the original, usually
+see that for all the ChEMBL datasets, $f_{\textrm{diff}}$ leads to a slightly better model in terms
+of RMSE and $R^2$ than when using $f_{\textrm{mean}}$. As with the Cavalli dataset, the SALI models
+exhibit more variance for small SALI values (i.e., less significant cliffs) but appear to perform
+better at the higher end of the SALI values. However in all three cases, the most significant cliffs
+exhibit significant variance. Based on these observations, we arbitrarily chose $f_{\textrm{diff}}$
+as the aggregation function for subsequent analyses. Fig.~\ref{fig:rfmodel-orig} summarizes the
+performance of the models built using the reported activity data for the Costanzo, Kalla and Dai
+datasets. Each of these model employed the entire dataset (rather than splitting into a training and
+testing set). These models are relatively poor. This can be partially ascribed to the small sizes of
+the dataset. It should be note that this methodology is not aimed at modeling the original, usually
 small, SAR dataset. It is well known (and evident from the current analyses) that small datasets do
-not lead to very robust or reliable machine learning models. Instead, the methodology focuses on the
-\emph{pairwise} dataset -- which are usually large enough for a statistically significant model.
+not necessarily lead to very robust or reliable machine learning models. Instead, the methodology
+focuses on the \emph{pairwise} dataset -- which are usually large enough for a statistically
+significant model.
+
+\subsection{An alternative validation approach}
+\label{sec:an-altern-valid}
+
 
 Since the model is built on pairs of observations, performance measures characterizing the model are
 based on the accuracy of pairwise SALI values. The model can also be tested in a slightly different
 approach by checking whether it can correctly identify cliffs between a new molecule and the member
-of the training set. To test this, we consider the original set of $n$ individual molecules and hold out
-$m$ molecules (as opposed to holding out a set of observations from the pairwise dataset). We then
-evaluate the SALI values $(n-m)(n-m-1)/2$ pairs of molecules and develop a random forest model. The
-model is then used to predict the SALI values between the $m$ holdout molecules and the $(n-m)$
-remaining molecules. 
+of the training set. To test this, we consider the original set of $n$ individual molecules and hold
+out $m$ molecules (as opposed to holding out a set of observations from the pairwise dataset). We
+then evaluate the SALI values $(n-m)(n-m-1)/2$ pairs of molecules and develop a random forest
+model. In contrast to the models previously described, we rebuilt these models using the entire set
+of $n$ molecules. The model is then used to predict the SALI values between the $m$ holdout
+molecules and the $(n-m)$ remaining molecules.
 
 We first performed this analysis with the Kalla dataset. Since predictions of new molecules involve
 $n$ predictions per molecule, we removed three molecules from the dataset and rebuilt the random
@@ -436,7 +442,7 @@ Name & Description & Endpoint & ChEMBL AID & Size & $N_{desc}$ & Reference
 Cavalli & \raggedright{Putative hERG inhibitors (via pharmacophore modeling)} & pIC$_{50}$ &  & 30 & 40 &  Ref.~\citen{Cavalli:2002aa} \NN
 Costanzo & \raggedright{Thrombin inhibitors} & $\mathrm{IC_{50}}$ & 305283 & 60 & 21 & 
 Ref.~\citen{Costanzo:2005uq} \NN
-Kalla & \raggedright{A2B adenosine receptor antagonists} & $K_i$ &
+Kalla & \raggedright{A2B adenosine receptor antagonists} & $429056K_i$ &
 364155 & 38 & 10 & Ref.~\citen{Kalla:2006kx} \NN
 Dai & \raggedright{RTK inhibitors} & $K_i$ & 429056 & 44 & 12 & Ref.~\citen{Dai:2007kl}
 % Mewshaw & \raggedright{ER$\beta$ inhibitors} & $\mathrm{IC_{50}}$ &
@@ -444,9 +450,7 @@ Dai & \raggedright{RTK inhibitors} & $K_i$ & 429056 & 44 & 12 & Ref.~\citen{Dai:
 \LL}
 
 \ctable[cap={}, caption={Performance metrics for the random forest
-  models built for the datasets used in this study. Training RMSE and $R^2$ are
-based on out-of-bag data\cite{Breiman:1984aa} and test metrics are based on a separate
-hold out set. },
+  models built for the datasets used in this study.},
 label={tab:rfmodel-results}]
 {lrcrrrr}
 {
@@ -512,34 +516,13 @@ label={fig:rfmodel-chembl},botcap,figure]
 
 
 \ctable[cap={}, caption={Results of random forest models developed
-  using the Costanzo dataset. The left plot shows the predicted versus
-  observed plot for the model using the original $\mathrm{IC_{50}}$ values, and
-  the right hand plot shows the predicted versus observed log(SALI)
-  values.}, label={fig:costanzo-pred}, figure, botcap]
+  using the three ChEMBL dataset. In each case the model was built using the $\log_{10}$ of the
+  observed activity.}, label={fig:rfmodel-orig}, figure, botcap]
 {c}
 {}
-{\includegraphics[width=\linewidth]{pred305283}}
-
-\ctable[cap={}, caption={Results of random forest models developed
-  using the Kalla dataset. The left plot shows the predicted versus
-  observed plot for the model using the original $K_i$ values, and
-  the right hand plot shows the predicted versus observed log(SALI)
-  values.}, label={fig:kalla-pred}, figure, botcap]
-{c}
-{}
-{\includegraphics[width=\linewidth]{pred364155}}   
+{\includegraphics[width=\linewidth]{rfmodel-orig}}
 
 
-\ctable[cap={}, caption={Results of random forest models developed
-  using the Dai dataset. The left plot shows the predicted versus
-  observed plot for the model using the original $K_i$ values, and
-  the right hand plot shows the predicted versus observed log(SALI)
-  values.}, label={fig:dai-pred}, figure, botcap]
-{c}
-{}
-{\includegraphics[width=\linewidth]{pred429056}}
-
- 
 \ctable[cap={}, caption={Detailed analysis of SALI predictions for the
   Kalla dataset. \textbf{A} - a plot of predicted versus observed
   log(SALI) values for the training set and the hold out

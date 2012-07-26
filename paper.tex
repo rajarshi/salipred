@@ -218,9 +218,9 @@ randomly sampled the descriptor pool for a given dataset, using $\sqrt(N)$ descr
 where $N$ is the number of descriptors in the pool. By default, the method builds individual trees
 using 63\% of the dataset and tested on the remainder (the so called out-of-bag data). The final
 predicted values for the entire dataset are obtained by averaging the predictions for each
-observation from from all 500 trees. We also investigated the traditional approach of a
-training/test set split (80\% of the dataset was assigned to the training set) and the results were
-similar. As a result, the remainder of this work employed models built using the entire dataset.
+observation from from all 500 trees. We initially employed a
+training/test set split (80\% of the dataset was assigned to the training set) and these results are
+reported in Table \ref{tab:data}.
 
 In this work, we employed the CDK to evaluate 109 2D and constitutional descriptors for each
 individual molecule. For each dataset, we performed objective feature selection by removing
@@ -257,10 +257,11 @@ developed three random forest models, using the three aggregation descriptor agg
 described in Section \ref{sec:methodology}. Fig.~\ref{fig:rfmodel-cavalli} presents the predicted
 versus observed SALI values from the three models and Table \ref{tab:rfmodel-results} summarizes the
 performance metrics for the three models. Overall the different aggregation functions do not differ
-dramatically in terms of the final model performance as root mean square error (RMSE) ranges from
-0.98 to 1.11 log units. However, $f_{\textrm{mean}}$ appears to lead to the best performance (RMSE = 0.98 and
-$R^2$ = 0.67). In contrast, the RMSE and $R^2$ values for Y-scrambled\cite{Rucker:2007aa} models
-using the different aggregation functions ranged from 1.58 to 1.61 log units and 0.003 to 0.01, respectively.
+dramatically in terms of the final model performance as root mean square error (RMSE) on the test
+set ranges from 1.01 to 1.07 log units. However, $f_{\textrm{mean}}$ appears to lead to the best
+performance (RMSE = 1.01 and $R^2$ = 0.58). In contrast, the RMSE and $R^2$ values for
+Y-scrambled\cite{Rucker:2007aa} models using the different aggregation functions ranged from 1.58 to
+1.61 log units and 0.003 to 0.01, respectively.
 
 Note that the predictions on the low end of the SALI values are not as important as those at the
 high end - simply because low SALI values correspond to small activity cliffs, which are likely not
@@ -273,18 +274,17 @@ for the three pairs are just 0.2, 0.30 and 0.29, though the activity differences
 We observed that the performance of models based on geometric mean aggregation function did not
 differ substantially from those built with the arithmetic mean. This was also true of the other
 datasets and so the following discussion omits the results obtained when using
-$f_{\textrm{geom}}$. In fact, a paired $t$-test between the predicted SALI values using models built
-with the different aggregation functions (i.e., $f_{\textrm{mean}}$ vs $f_{\textrm{absdiff}}$, etc.)
-indicated that the differences between the sets of predictions was statistically insignificant (all
-$p$-values $> 0.1$). Fig.~\ref{fig:rfmodel-chembl} summarizes the models built on the ChEMBL
-datasets using $f_{\textrm{diff}}$ and $f_{\textrm{mean}}$ as the aggregation functions. Table
-\ref{tab:rfmodel-results} reports the model statistics.  While the differences in model performance
-do not vary significantly with the aggregation function used, we see that for the Costanzo and Kalla
-datasets, $f_{\textrm{diff}}$ leads to a slightly better model in terms of RMSE and $R^2$ than when
-using $f_{\textrm{mean}}$.
+$f_{\textrm{geom}}$. In fact, a paired $t$-test between the predicted (from the training set) SALI
+values using models built with the different aggregation functions (i.e., $f_{\textrm{mean}}$ vs
+$f_{\textrm{absdiff}}$, etc.)  indicated that the differences between the sets of predictions was
+statistically insignificant (all $p$-values $> 0.1$). Fig.~\ref{fig:rfmodel-chembl} summarizes the
+models built on the ChEMBL datasets using $f_{\textrm{diff}}$ and $f_{\textrm{mean}}$ as the
+aggregation functions. Table \ref{tab:rfmodel-results} reports the model statistics.  While the
+differences in model performance do not vary significantly with the aggregation function used, we
+see that for all the ChEMBL datasets, $f_{\textrm{diff}}$ leads to a slightly better model
+in terms of RMSE and $R^2$ than when using $f_{\textrm{mean}}$.
 
-
-Given this observation, we arbitrarily chose $f_{\textrm{mean}}$ as the aggregation function
+Given this observation, we arbitrarily chose $f_{\textrm{diff}}$ as the aggregation function
 for subsequent analyses. Figs.~\ref{fig:costanzo-pred}, \ref{fig:kalla-pred} and \ref{fig:dai-pred}
 summarize the performance of the models built using the reported activity data and the pairwise SALI
 values for the Costanzo, Kalla and Dai datasets, respectively. As with the Cavalli dataset, the SALI

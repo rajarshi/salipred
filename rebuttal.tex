@@ -35,15 +35,22 @@ example, how were the RF models trained and evaluated for which predictions of p
 are reported in Figure 2? It is hoped that the reported SALI values were not predicted for the
 training data.}
 
-XXX
+We have updated the text to note the training/test split and have include results for both sets in
+the text. However, due to the similar peformance of models built using the whole dataset (and the
+fact that the RF approach trains and tests on out-of-bag data implicitly), we used models built
+using the entire dataset (save for some hold out molecules) in the latter half of Section 4.
 
 \textbf{(5) No support is provided for the assumption that the RF models “are relatively robust even for
 datasets of small size”. In fact, the author later on states several times that limited model
 quality might be due to the use of small compound sets. Appropriate validation will be essential
-here.
-}
+here.}
 
-XXX
+We have removed this statement as it is not necessarily a function of the random forest approach,
+and more a function of the nature of the dataset. Small datasets, if appropriately constructed can
+lead to low RMSE. In our case, we simulated by sampling from the Cavalli pairwise dataset, using
+different sample sizes. As shown in the attached figure, model performance is clearly a function of
+sample size. Importantly, for certain small samples, the model performance can be quite good. But of
+course, this is due to luck.
 
 \textbf{(6) There is only limited statistical assessment/validation of the models. Statements made in the
 text that R2 values are “reasonable” and the models perform “relatively well” are difficult to
@@ -51,16 +58,20 @@ reconcile. Rather, Table 2 indicates that the R2 values were rather poor in seve
 
 The text has been updated to read more quantitatively and avoid ambiguous statements
 
-(7) It appears that there are systematic prediction errors for pairs. At low value ranges (that are
+\textbf{(7) It appears that there are systematic prediction errors for pairs. At low value ranges (that are
 not relevant for activity cliff assessment), SALI values are consistently over-predicted. By
 contrast, at high value ranges (that are relevant), SALI values are consistently under-predicted, in
 part significantly. This is not investigated, although the apparent errors at high value ranges are
-the perhaps most critical features of the reported RF models.
+the perhaps most critical features of the reported RF models.}
 
-(8) In the section “Extending a landscape”, predictions are finally reported for only three (!)
+XXX
+
+\textbf{(8) In the section “Extending a landscape”, predictions are finally reported for only three (!)
 molecules taken out of each data set. Carefully put, the predictions are heterogeneous. On the basis
 of the results reported for this little bit of evaluation, one would be hard pressed to make a case
-for the ability of the approach to predict activity cliffs with any certainty.
+for the ability of the approach to predict activity cliffs with any certainty.}
+
+XXX
 
 \textbf{(9) For the prediction of activity cliffs, SALI values must be calculated for compound
   pairs. This is the central idea of the approach. Accordingly, fingerprint descriptors and potency

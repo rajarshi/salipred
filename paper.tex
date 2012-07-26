@@ -218,17 +218,18 @@ randomly sampled the descriptor pool for a given dataset, using $\sqrt(N)$ descr
 where $N$ is the number of descriptors in the pool. By default, the method builds individual trees
 using 63\% of the dataset and tested on the remainder (the so called out-of-bag data). The final
 predicted values are obtained by averaging the predictions for each observation from from all 500
-trees. We initially employed a training/test set split (80\% of the dataset was assigned to the
-training set) and these results are reported in Table \ref{tab:rfmodel-results}. We also developed
-models (Section \ref{sec:an-altern-valid} using the entire dataset and observed similar RMSE and
-$R^2$ values. Given the fact that the random forest algorithm builds a model based on out-of-bag
-data, using the entire dataset rather than a single training/test split this is not surprising.
+trees. We initially employed a training/test set split (80\% of the dataset was randomly assigned to
+the training set) and these results are reported in Table \ref{tab:rfmodel-results}. We also
+developed models (Section \ref{sec:an-altern-valid}) using the entire dataset and observed similar
+RMSE and $R^2$ values. Given the fact that the random forest algorithm builds a model based on
+out-of-bag data, the similarity in performance of models built using the entire dataset and models
+built using a training/test split is not surprising.
 
-In this work, we employed the CDK to evaluate 109 2D and constitutional descriptors for each
-individual molecule. For each dataset, we performed objective feature selection by removing
-descriptors with constant or near-constant values followed by removal of descriptors that are highly
-correlated with others (using an $R^2$ cutoff of 0.8). The sizes ($N_{desc}$) of the final
-descriptor pool for each dataset are summarized in Table \ref{tab:data}.
+We employed the CDK to evaluate 109 2D and constitutional descriptors for each  molecule. For each
+dataset, we performed objective feature selection by removing descriptors with constant or
+near-constant values followed by removal of descriptors that are highly correlated with others
+(using an $R^2$ cutoff of 0.8). The sizes ($N_{desc}$) of the final descriptor pool for each dataset
+are summarized in Table \ref{tab:data}.
 
 A side effect of the proposed approach is that one can build relatively robust models for datasets of
 small size -- say, 20 molecules. Of course, a large training set is just one aspect of a reliable
@@ -288,13 +289,15 @@ of RMSE and $R^2$ than when using $f_{\textrm{mean}}$. As with the Cavalli datas
 exhibit more variance for small SALI values (i.e., less significant cliffs) but appear to perform
 better at the higher end of the SALI values. However in all three cases, the most significant cliffs
 exhibit significant variance. Based on these observations, we arbitrarily chose $f_{\textrm{diff}}$
-as the aggregation function for subsequent analyses. Fig.~\ref{fig:rfmodel-orig} summarizes the
-performance of the models built using the reported activity data for the Costanzo, Kalla and Dai
-datasets. Each of these model employed the entire dataset (rather than splitting into a training and
-testing set). These models are relatively poor. This can be partially ascribed to the small sizes of
-the dataset. It should be note that this methodology is not aimed at modeling the original, usually
-small, SAR dataset. It is well known (and evident from the current analyses) that small datasets do
-not necessarily lead to very robust or reliable machine learning models. Instead, the methodology
+as the aggregation function for subsequent analyses. Table \ref{tab:rfmodel-orig} and
+Figure \ref{fig:rfmodel-orig} summarizes the performance of the models built using the reported
+activity data (original, single molecule activity) for the Costanzo, Kalla and Dai datasets. Each of
+these models employed the entire dataset (rather than splitting into a training and testing set) and
+exhibit relatively poor performance as indicated by the RMSE (ranging from 0.76 to 1.00 log units)
+and $R^2$ (0.18 to 0.34).. This can be partially ascribed to the small sizes of the dataset. It
+should be note that this methodology is not aimed at modeling the original, usually small, SAR
+dataset. It is well known (and evident from the current analyses) that small datasets do not
+necessarily lead to very robust or reliable machine learning models. Instead, the methodology
 focuses on the \emph{pairwise} dataset -- which are usually large enough for a statistically
 significant model.
 
@@ -303,21 +306,26 @@ significant model.
 
 
 Since the model is built on pairs of observations, performance measures characterizing the model are
-based on the accuracy of pairwise SALI values. The model can also be tested in a slightly different
-approach by checking whether it can correctly identify cliffs between a new molecule and the member
-of the training set. To test this, we consider the original set of $n$ individual molecules and hold
-out $m$ molecules (as opposed to holding out a set of observations from the pairwise dataset). We
-then evaluate the SALI values $(n-m)(n-m-1)/2$ pairs of molecules and develop a random forest
-model. In contrast to the models previously described, we rebuilt these models using the entire set
-of $n$ molecules. The model is then used to predict the SALI values between the $m$ holdout
-molecules and the $(n-m)$ remaining molecules.
+based on the accuracy of pairwise SALI values. Thus the preceding section validated models based on
+holding out pairs of observations and evaluating the RMSE and $R^2$ for the predicted values of
+these held out pairs.
+
+The model can also be tested in a slightly different approach by checking whether it can correctly
+identify cliffs between a new molecule and the member of the training set. In fact, such a scenario
+would be the anticipated, prospective use case for such a modeling methodology. To test this, we
+consider the original set of $n$ individual molecules in a dataset and hold out $m$ molecules (as
+opposed to holding out a set of observations from the pairwise dataset). We then evaluate the SALI
+values $(n-m)(n-m-1)/2$ pairs of molecules and develop a random forest model. In contrast to the
+models previously described, we rebuilt these models using the entire set of $n$ molecules. The
+model is then used to predict the SALI values between the $m$ holdout molecules and the $(n-m)$
+remaining molecules.
 
 We first performed this analysis with the Kalla dataset. Since predictions of new molecules involve
 $n$ predictions per molecule, we removed three molecules from the dataset and rebuilt the random
 forest model. The hold out molecules, were specifically selected since they displayed significant
 activity cliffs with various members of the training set. We then evaluated the pairwise descriptor
 values for these three with the training set molecules and obtained predictions of the log(SALI)
-values. Fig.~\ref{fig:tset-pset-kalla}A summarizes the performance of the model on the training set
+values. Figure \ref{fig:tset-pset-kalla}A summarizes the performance of the model on the training set
 as well as for the prediction set. From a numerical point of view, the performance of the model on
 he prediction set degrades somewhat (RMSE of 0.51 versus 0.41 for the training set). As noted above,
 the variance of the prediction is higher at the lower scale of log(SALI) values. However, at the
@@ -327,7 +335,7 @@ number of relatively significant activity cliffs have been underestimated.
 Given that large SALI values can arise due to high structural similarity, even when the activity
 difference is small, simply examining log(SALI) values is not completely informative. Specifically,
 we are interested in the predictions for the actual activity cliffs, where both the difference in
-activity and the structural similarity is very high. Fig.~\ref{fig:tset-pset-kalla}B visualizes this
+activity and the structural similarity is very high. Figure \ref{fig:tset-pset-kalla}B visualizes this
 information. Each point corresponds to a pair of molecules, which are shaded by the absolute
 prediction residual for that pair. Thus, the ``true'' cliffs are represented by points lying towards
 the bottom right corner of the plot. In this case we see that there are a number of pairs of
@@ -335,28 +343,28 @@ molecules with $1 - T_C \leq 0.1$ and 100-fold or better difference in activity.
 pairs are associated with a high prediction residual, there are a number with low to medium
 residuals.
   
-Fig.~\ref{fig:kalla-comparison} displays the structures of the three hold out molecules (top row)
+Figure \ref{fig:kalla-comparison} displays the structures of the three hold out molecules (top row)
 and a selection of structures, which which these hold out molecules were predicted to exhibit an
 activity cliff. For each molecule, the $K_i$ value is listed along with the absolute residual value
 (log(SALI) units). For molecules \textbf{349288} and \textbf{349699}, the predicted cliffs are
 relatively accurate, as evidenced by the low residuals. For \textbf{349138} on the other hand, most
 of the residuals were were relatively high. While we have highlighted a number of cliffs,
-Fig.~\ref{fig:tset-pset-kalla}C makes it clear that the predictions for this molecule were, on
+Figure \ref{fig:tset-pset-kalla}C makes it clear that the predictions for this molecule were, on
 average, worse than for the other two molecules.
 
-Fig.~\ref{fig:tset-pset-dai} summarizes the results for the same set of analyzes described above,
+Figure \ref{fig:tset-pset-dai} summarizes the results for the same set of analyzes described above,
 applied to the Dai dataset. As before we removed three molecules (top row of
-Fig.~\ref{fig:dai-comparison}) and rebuilt the random forest on the paired cases with the remaining
+Figure \ref{fig:dai-comparison}) and rebuilt the random forest on the paired cases with the remaining
 41 molecules. We then predicted the pairwise SALI values for the three hold-out molecules with the
 remaining 41 molecules (i.e., the prediction set). A plot of the predicted versus observed log(SALI)
-values for the training and prediction sets are displayed in Fig.~\ref{fig:tset-pset-dai}A. As
+values for the training and prediction sets are displayed in Figure \ref{fig:tset-pset-dai}A. As
 before the model performs poorly on the lesser cliffs, but improves for the more significant cliffs
 (RMSE for the training set and prediction sets were 0.37 and 0.43 log units respectively). However,
 the 2 most significant cliffs are under-estimated. However, in comparison to the Kalla dataset, the
 distribution of absolute residuals aggregated by the hold-out molecule
-(Fig.~\ref{fig:tset-pset-dai}C) are similar, with a median absolute residual of less than
+(Figure \ref{fig:tset-pset-dai}C) are similar, with a median absolute residual of less than
 0.3 log units.  For this dataset, the number of ``real'' cliffs is relatively low as shown in
-Fig.~\ref{fig:tset-pset-dai}B. Interestingly, the compound pairs that display moderate to
+Figure \ref{fig:tset-pset-dai}B. Interestingly, the compound pairs that display moderate to
 significant cliffs are relatively well predicted - in fact, the maximum residuals are observed for
 the least significant cliffs.
 
@@ -367,7 +375,7 @@ which they are predicted to show activity cliffs. For this dataset, there are re
 cliff. However, the pair is well predicted with a residual of 0.04 log units. if we consider the
 subset of predictions where the $T_c \geq 0.8$ we note that the median absolute residual is 0.24 log
 units. However, the activity differences are not always significant ranging from 1.1-fold to
-13-fold. Two such examples are shown in Fig.~\ref{fig:dai-comparison}, where the only difference is
+13-fold. Two such examples are shown in Figure \ref{fig:dai-comparison}, where the only difference is
 in the position of the methyl substituent. Similar behavior is observed with the other hold-out
 molecules.
 
@@ -388,7 +396,7 @@ Given that many of the models show relatively poor statistics on the pairwise da
 to note that much of this is due to the large variance in the predictions for the less significant
 cliffs. One possible reason for the increase in variance for these portions of the dataset is the
 fact that the distribution of the log(SALI) values tends to be skewed to the right
-(Fig.~\ref{fig:logsalidist}). In general we see that the smaller SALI values constitute a relatively
+(Figure \ref{fig:logsalidist}). In general we see that the smaller SALI values constitute a relatively
 small portion of the dataset.
 
 Another factor affecting the models built on pairwise data is the descriptors that are
@@ -477,6 +485,23 @@ Dai & 32.71 & $f_{\textrm{diff}}$ & 2.49& 0.48 & 3.21& 0.22\NN
 \LL
 }
 
+\ctable[cap={}, caption={Performance metrics for the random forest
+  models built on the single molecule activity data, for each ChEMBL dataset. In each case the model
+was built using the logarithm of the reported activities.},
+label={tab:rfmodel-orig}]
+{lrrr}
+{
+
+}
+{\FL
+Dataset & Y-range & RMSE & $R^2$
+\ML
+Costanzo & 4.67 & 0.80 & 0.18 \NN
+Kall          & 4.44 & 1.00 & 0.32 \NN
+Dai          &  3.60 & 0.76 & 0.34
+\LL
+}
+
 \clearpage
 \newpage
     
@@ -537,7 +562,7 @@ label={fig:tset-pset-kalla}, figure, botcap]
 {}
 {\includegraphics[width=\linewidth]{tset-pset-kalla}}      
 
-\ctable[cap={}, caption={The hold out molecules for the Kalla dataset
+\ctable[cap={}, caption={Three of the hold out molecules for the Kalla dataset
   and training set members with which the hold outs exhibit predicted
   activity cliffs. Bold numbers are ChEMBL MOLREGNO values and numbers
   in parentheses are the absolute prediction

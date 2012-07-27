@@ -50,12 +50,10 @@ NIH Center for Advancing Translational Sciences \\ 9800 Medical Center Drive  Ro
   relationship datasets). We extracted structure-activity data for several ChEMBL assays and
   developed random forest models to predict SALI values, from pairwise combinations of molecular
   descriptors. The models exhibited reasonable RMSE's though, surprisingly, performance on the more
-  significant cliffs tended to be better than on the lesser ones. Our results indicate that the
-  predictive models are able to prioritize molecules in terms of their ability to activity cliffs
-  and can be used as a way to extend an observed activity landscape to identify molecules that could
-  lead to significant improvements in activity. Conversely, the method can be used to deprioritize
-  molecules that are predicted to show an activity cliff with a potent molecule already in the
-  dataset.
+  significant cliffs tended to be better than on the lesser ones. While the models do not exhibit
+  very high levels of accuracy, our results indicate that they are able to prioritize molecules in
+  terms of their ability to activity cliffs, thus serving as a tool to prospectively identify
+  activity cliffs..
 \end{abstract}
 
 \section{Introduction}
@@ -97,7 +95,7 @@ In either case, one can take the numerical values and visualize them in a variet
 from heatmaps of SALI matrices to network representations \cite{Wawer:2008aa,Guha:2008aa}. These
 visualizations then allow the user to explore the landscape, quickly identifying a range of activity
 cliffs, which an then be examined in detail. Apart from identifying individual activity cliffs, a
-variety of other SAR constructs, such as ``activity ridges'' \cite{Vogt:2011bs} and multitarget
+variety of other SAR constructs, such as ``activity ridges'' \cite{Vogt:2011bs} and multi-target
 landscapes\cite{Dimova:2011fk} can also be identified and characterized.
 
 A feature common to all, recently published work on activity landscapes is that they are primarily
@@ -261,10 +259,11 @@ described in Section \ref{sec:methodology}. Fig.~\ref{fig:rfmodel-cavalli} prese
 versus observed SALI values from the three models and Table \ref{tab:rfmodel-results} summarizes the
 performance metrics for the three models. Overall the different aggregation functions do not differ
 dramatically in terms of the final model performance as root mean square error (RMSE) on the test
-set ranges from 1.01 to 1.07 log units. However, $f_{\textrm{mean}}$ appears to lead to the best
-performance (RMSE = 1.01 and $R^2$ = 0.58). In contrast, the RMSE and $R^2$ values for
-Y-scrambled\cite{Rucker:2007aa} models using the different aggregation functions ranged from 1.58 to
-1.61 log units and 0.003 to 0.01, respectively.
+set ranges from 1.01 to 1.07 log units, which is lower compared to the standard deviation of the
+dependent variable. However, $f_{\textrm{mean}}$ appears to lead to the best performance (RMSE =
+1.01 and $R^2$ = 0.58). In contrast, the RMSE and $R^2$ values for Y-scrambled\cite{Rucker:2007aa}
+models using the different aggregation functions ranged from 1.58 to 1.61 log units and 0.003 to
+0.01, respectively.
 
 Note that the predictions on the low end of the SALI values are not as important as those at the
 high end - simply because low SALI values correspond to small activity cliffs, which are likely not
@@ -296,24 +295,28 @@ set) using models built with the different aggregation functions (i.e., $f_{\tex
 $f_{\textrm{diff}}$, etc.)  indicated that the differences between the sets of predictions was
 statistically insignificant (all $p$-values $> 0.1$). Fig.~\ref{fig:rfmodel-chembl} summarizes the
 models built on the ChEMBL datasets using $f_{\textrm{diff}}$ and $f_{\textrm{mean}}$ as the
-aggregation functions. Table \ref{tab:rfmodel-results} reports the model statistics.  While the
-differences in model performance do not vary significantly with the aggregation function used, we
-see that for all the ChEMBL datasets, $f_{\textrm{diff}}$ leads to a slightly better model in terms
-of RMSE and $R^2$ than when using $f_{\textrm{mean}}$. As with the Cavalli dataset, the SALI models
-exhibit more variance for small SALI values (i.e., less significant cliffs) but appear to perform
-better at the higher end of the SALI values. However in all three cases, systematic prediction
-errors are apparent. Based on these observations, we arbitrarily chose $f_{\textrm{diff}}$ as the
-aggregation function for subsequent analyses. Table \ref{tab:rfmodel-orig} and Figure
-\ref{fig:rfmodel-orig} summarizes the performance of the models built using the reported activity
-data (original, single molecule activity) for the Costanzo, Kalla and Dai datasets. Each of these
-models employed the entire dataset (rather than splitting into a training and testing set) and
-exhibit relatively poor performance as indicated by the RMSE (ranging from 0.76 to 1.00 log units)
-and $R^2$ (0.18 to 0.34). This can be partially ascribed to the small sizes of the dataset. It
-should be note that this methodology is not aimed at modeling the original, usually small, SAR
-dataset. It is well known (and evident from the current analyses) that small datasets do not
-necessarily lead to very robust or reliable machine learning models. Instead, the methodology
-focuses on \emph{pairwise} datasets -- which are usually large enough for a statistically
-significant model.
+aggregation functions. Table \ref{tab:rfmodel-results} reports the model statistics Of the three,
+the Costanzo stands out as being rather poor given the training and test set RMSE values being quite
+close to (or greater than) the standard deviation of the dependent variable.  While the differences
+in model performance do not vary significantly with the aggregation function used, we see that for
+all the ChEMBL datasets, $f_{\textrm{diff}}$ leads to a slightly better model in terms of RMSE and
+$R^2$ than when using $f_{\textrm{mean}}$. As with the Cavalli dataset, the SALI models exhibit more
+variance for small SALI values (i.e., less significant cliffs) but appear to perform better at the
+higher end of the SALI values. However in all three cases, systematic prediction errors are
+apparent. Based on these observations, we arbitrarily chose $f_{\textrm{diff}}$ as the aggregation
+function for subsequent analyses. Table \ref{tab:rfmodel-orig} and Figure \ref{fig:rfmodel-orig}
+summarizes the performance of the models built using the reported activity data (original, single
+molecule activity) for the Costanzo, Kalla and Dai datasets. Each of these models employed the
+entire dataset (rather than splitting into a training and testing set) and exhibit relatively poor
+performance as indicated by the RMSE (ranging from 0.76 to 1.00 log units) and $R^2$ (0.18 to
+0.34). The model for the Kalla dataset is especially poor, given the RMSE is greater than the
+standard deviation of the dependent variable. The poor performance of these models can be partially
+ascribed to the small sizes of the dataset. It should be note that this methodology is not aimed at
+modeling the original, usually small, SAR dataset. It is well known (and evident from the current
+analyses) that small datasets do not necessarily lead to very robust or reliable machine learning
+models. Instead, the methodology focuses on \emph{pairwise} datasets -- which are usually large
+enough for a statistically significant model. Based on the poor performance observed for the
+Costanzo dataset, we excluded it from our subsequent discussions.
 
 \subsection{An alternative validation approach}
 \label{sec:an-altern-valid}
@@ -483,47 +486,48 @@ Dai & \raggedright{RTK inhibitors} & $K_i$ & 429056 & 44 & 12 & Ref.~\citen{Dai:
 \LL}
 
 \ctable[cap={}, caption={Performance metrics for the random forest
-  models built for the datasets used in this study.},
+  models built for the datasets used in this study. SD is the standard
+deviation of the dependent variable.},
 label={tab:rfmodel-results}]
-{lrcrrrr}
+{lrrcrrrr}
 {
 \tnote{Y-range is calculated using the entire dataset for each study.}
 }
 {\FL
-        &         &                      & \multicolumn{2}{c}{Training} & \multicolumn{2}{c}{Test}
+        &    &     &                      & \multicolumn{2}{c}{Training} & \multicolumn{2}{c}{Test}
 \NN
-\cmidrule{4-5}  \cmidrule{6-7}
-Dataset & Y-range\tmark & Aggregation Function & RMSE & $R^2$ & RMSE & $R^2$   
+\cmidrule{5-6}  \cmidrule{7-8}
+Dataset & Y-range\tmark & SD\tmark & Aggregation Function & RMSE & $R^2$ & RMSE & $R^2$   
 \ML
-Cavalli & 7.21 & $f_{\textrm{diff}}$ & 1.16& 0.54 & 1.07& 0.56\NN
-        & & $f_{\textrm{mean}}$      & 1.03& 0.64 & 1.01& 0.58\NN
-        & & $f_{\textrm{geom}}$      & 1.07& 0.61 & 1.01& 0.59\NN \NN
+Cavalli & 7.21 & 1.57 & $f_{\textrm{diff}}$ & 1.16& 0.54 & 1.07& 0.56\NN
+        & & & $f_{\textrm{mean}}$      & 1.03& 0.64 & 1.01& 0.58\NN
+        & & & $f_{\textrm{geom}}$      & 1.07& 0.61 & 1.01& 0.59\NN \NN
 %%
-Costanzo & 288.03& $f_{\textrm{diff}}$ & 11.99& 0.24 & 17.97& 0.10 \NN
-       & & $f_{\textrm{mean}}$         & 12.88& 0.12 & 16.96& 0.20\NN \NN
+Costanzo & 288.02& 14.84 & $f_{\textrm{diff}}$ & 11.99& 0.24 & 17.97& 0.10 \NN
+       & & &  $f_{\textrm{mean}}$         & 12.88& 0.12 & 16.96& 0.20\NN \NN
 %%
-Kalla & 88.25 & $f_{\textrm{diff}}$ & 8.12& 0.59 & 6.49& 0.57\NN
-      &  & $f_{\textrm{mean}}$      & 8.79& 0.52 & 8.00& 0.47\NN \NN
+Kalla & 88.25 & 12.16 & $f_{\textrm{diff}}$ & 8.12& 0.59 & 6.49& 0.57\NN
+      &  & &  $f_{\textrm{mean}}$      & 8.79& 0.52 & 8.00& 0.47\NN \NN
 %%
-Dai & 32.71 & $f_{\textrm{diff}}$ & 2.49& 0.48 & 3.21& 0.22\NN
-     &   & $f_{\textrm{mean}}$    & 2.64& 0.41 & 2.86& 0.37
+Dai & 32.71 & 3.48 & $f_{\textrm{diff}}$ & 2.49& 0.48 & 3.21& 0.22\NN
+     &   & & $f_{\textrm{mean}}$    & 2.64& 0.41 & 2.86& 0.37
 \LL
 }
 
 \ctable[cap={}, caption={Performance metrics for the random forest
   models built on the single molecule activity data, for each ChEMBL dataset. In each case the model
-was built using the logarithm of the reported activities.},
+was built using the $\log_{10}$ of the reported activities.},
 label={tab:rfmodel-orig}]
-{lrrr}
+{lrrrr}
 {
 
 }
 {\FL
-Dataset & Y-range & RMSE & $R^2$
+Dataset & Y-range & SD & RMSE & $R^2$
 \ML
-Costanzo & 4.67 & 0.80 & 0.18 \NN
-Kall          & 4.44 & 1.00 & 0.32 \NN
-Dai          &  3.60 & 0.76 & 0.34
+Costanzo & 4.67 & 1.22 & 0.80 & 0.18 \NN
+Kalla          & 4.44 & 0.78 & 1.00 & 0.32 \NN
+Dai          &  3.60 & 0.94 & 0.76 & 0.34
 \LL
 }
 

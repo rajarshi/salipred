@@ -277,7 +277,7 @@ appears to be two different systematic prediction errors - smaller SALI values a
 whereas larger values are underestimated.  A possible explanation for this behavior is that the
 descriptors do not sufficiently differentiate observations with low and high SALI values. In other
 words, the descriptor profile for observations with low SALI values is sufficiently similar to those
-with high SALI values. To test this out, we split the Cavalli dataset into two groups - low and high
+with high SALI values. To test this, we split the Cavalli dataset into two groups - low and high
 - using the median SALI value as the cutoff. We then evaluated the pairwise descriptor distance
 distributions for each each of the groups, using the Euclidean distance between all descriptors in
 the pool. Figure \ref{fig:cavalli-desc-dist} indicates that the distance distributions are
@@ -552,9 +552,9 @@ label={fig:desccor1},figure,botcap]
 
 \ctable[cap={}, caption={A comparison of the pairwise descriptor distribution for low and high SALI
   values in the Cavalli dataset. This figure employed the descriptor values generated using the
-  $f_{diff}$ aggregation function and Euclidean distances were evaluataed using all the descriptors
+  $f_{\textrm{diff}}$ aggregation function and Euclidean distances were evaluated using all the descriptors
   in the pool. The \emph{low} group is defined as those observations with SALI
-  less than 2.03 and the remainder is assigned to the \emph{high} group.},
+  less than 2.03 and the remainder are assigned to the \emph{high} group.},
 label={fig:cavalli-desc-dist}, botcap, figure]
 {c}
 {}

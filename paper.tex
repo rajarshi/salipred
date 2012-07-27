@@ -272,14 +272,28 @@ very interesting. Given that observation, it is encouraging to observe that all 
 relatively well at the higher end of the SALI spectrum. For this example, the three most significant
 activity cliffs are in fact not very significant activity cliffs in an absolute sense - the $T_c$
 for the three pairs are just 0.2, 0.30 and 0.29, though the activity differences were 4.93, 5.0 and
-5.11 log units respectively.
+5.11 log units respectively.  But more importantly, it is clear from all three panels that the there
+appears to be two different systematic prediction errors - smaller SALI values are overestimated
+whereas larger values are underestimated.  A possible explanation for this behavior is that the
+descriptors do not sufficiently differentiate observations with low and high SALI values. In other
+words, the descriptor profile for observations with low SALI values is sufficiently similar to those
+with high SALI values. To test this out, we split the Cavalli dataset into two groups - low and high
+- using the median SALI value as the cutoff. We then evaluated the pairwise descriptor distance
+distributions for each each of the groups, using the Euclidean distance between all descriptors in
+the pool. Figure \ref{fig:cavalli-desc-dist} indicates that the distance distributions are
+essentially identical. Though random forest models employ a subset of the descriptor pool for each
+tree, the same reasoning can be applied to these subsets. These trends appear in the other datasets
+(Figure \ref{fig:rfmodel-chembl}) but to varying degrees and not always consistently. For example,
+in the Costanzo dataset, we see that the higher SALI values are somewhat underestimated. The concept
+of descriptor similarity could also be applied to these cases. But a more fundamental explanation of
+this behavior is not available at this time.
 
 We observed that the performance of models based on geometric mean aggregation function did not
 differ substantially from those built with the arithmetic mean. This was also true of the other
 datasets and so the following discussion omits the results obtained when using
-$f_{\textrm{geom}}$. In fact, a paired $t$-test between the predicted (from the training set) SALI
-values using models built with the different aggregation functions (i.e., $f_{\textrm{mean}}$ vs
-$f_{\textrm{absdiff}}$, etc.)  indicated that the differences between the sets of predictions was
+$f_{\textrm{geom}}$. In fact, a paired $t$-test between the predicted SALI values (for the training
+set) using models built with the different aggregation functions (i.e., $f_{\textrm{mean}}$ vs
+$f_{\textrm{diff}}$, etc.)  indicated that the differences between the sets of predictions was
 statistically insignificant (all $p$-values $> 0.1$). Fig.~\ref{fig:rfmodel-chembl} summarizes the
 models built on the ChEMBL datasets using $f_{\textrm{diff}}$ and $f_{\textrm{mean}}$ as the
 aggregation functions. Table \ref{tab:rfmodel-results} reports the model statistics.  While the
@@ -287,18 +301,18 @@ differences in model performance do not vary significantly with the aggregation 
 see that for all the ChEMBL datasets, $f_{\textrm{diff}}$ leads to a slightly better model in terms
 of RMSE and $R^2$ than when using $f_{\textrm{mean}}$. As with the Cavalli dataset, the SALI models
 exhibit more variance for small SALI values (i.e., less significant cliffs) but appear to perform
-better at the higher end of the SALI values. However in all three cases, the most significant cliffs
-exhibit significant variance. Based on these observations, we arbitrarily chose $f_{\textrm{diff}}$
-as the aggregation function for subsequent analyses. Table \ref{tab:rfmodel-orig} and
-Figure \ref{fig:rfmodel-orig} summarizes the performance of the models built using the reported
-activity data (original, single molecule activity) for the Costanzo, Kalla and Dai datasets. Each of
-these models employed the entire dataset (rather than splitting into a training and testing set) and
+better at the higher end of the SALI values. However in all three cases, systematic prediction
+errors are apparent. Based on these observations, we arbitrarily chose $f_{\textrm{diff}}$ as the
+aggregation function for subsequent analyses. Table \ref{tab:rfmodel-orig} and Figure
+\ref{fig:rfmodel-orig} summarizes the performance of the models built using the reported activity
+data (original, single molecule activity) for the Costanzo, Kalla and Dai datasets. Each of these
+models employed the entire dataset (rather than splitting into a training and testing set) and
 exhibit relatively poor performance as indicated by the RMSE (ranging from 0.76 to 1.00 log units)
-and $R^2$ (0.18 to 0.34).. This can be partially ascribed to the small sizes of the dataset. It
+and $R^2$ (0.18 to 0.34). This can be partially ascribed to the small sizes of the dataset. It
 should be note that this methodology is not aimed at modeling the original, usually small, SAR
 dataset. It is well known (and evident from the current analyses) that small datasets do not
 necessarily lead to very robust or reliable machine learning models. Instead, the methodology
-focuses on the \emph{pairwise} dataset -- which are usually large enough for a statistically
+focuses on \emph{pairwise} datasets -- which are usually large enough for a statistically
 significant model.
 
 \subsection{An alternative validation approach}
@@ -395,12 +409,13 @@ is observed with the other hold-out molecules.
 The results described above suggest that predicting pairwise SALI values is a useful way to identify
 whether a new molecule will form an activity cliff with one or more members of the training set. As
 with all QSAR models, one is limited by the nature of the underlying data, both in terms of accuracy
-as well as applicability. We have selected a few ChEMBL assays for the purposes of
-highlighting this approach, we have found that for some assays, the model built on pairwise data
-performs worse than the model built on the original data. Given that most of the datasets are small
-in size (less than 40 molecules), the poor performance of the initial model is not always
-surprising. However, in cases where the pairwise model does not exhibit improved performance, we
-believe that predictive modeling of activity cliffs in the original dataset will not be fruitful.
+as well as applicability. We have selected a few ChEMBL assays for the purposes of highlighting this
+approach. Given that most of the datasets are small in size (30 to 50 molecules), models built on
+the actual activity data do not perform very well. In contrast the models built on the pairwise data
+usually exhibit improved performance - which could certainly be ascribed to the larger dataset
+involved. However, in cases where the pairwise model does
+not exhibit improved performance, we believe that predictive modeling of activity cliffs in the
+original dataset will not be fruitful.
 
 Given that many of the models show relatively poor statistics on the pairwise data, it is important
 to note that much of this is due to the large variance in the predictions for the less significant
@@ -535,6 +550,18 @@ label={fig:desccor1},figure,botcap]
 \includegraphics[width=\linewidth]{rfmodels-cavalli}
 }
 
+\ctable[cap={}, caption={A comparison of the pairwise descriptor distribution for low and high SALI
+  values in the Cavalli dataset. This figure employed the descriptor values generated using the
+  $f_{diff}$ aggregation function and Euclidean distances were evaluataed using all the descriptors
+  in the pool. The \emph{low} group is defined as those observations with SALI
+  less than 2.03 and the remainder is assigned to the \emph{high} group.},
+label={fig:cavalli-desc-dist}, botcap, figure]
+{c}
+{}
+{
+\includegraphics[width=\linewidth]{cavalli-desc-dist}
+}
+
 \ctable[cap={}, caption={Predicted versus observed SALI values,
   obtained from random forest models for the three ChEMBL datasets. The
  three plots correspond to the two different aggregation functions
@@ -619,7 +646,7 @@ label={fig:dai-comparison}]
 {}  
 {\includegraphics[width=\linewidth]{dai-comparison}}  
 
-\ctable[cap={}, caption={Distribution of log(SALI) values for the
+\ctable[cap={}, caption={Distribution of observed log(SALI) values for the
   three ChEMBL datasets.}, figure, botcap,
 label={fig:logsalidist}]    
 {c}

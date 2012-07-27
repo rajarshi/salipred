@@ -64,14 +64,32 @@ contrast, at high value ranges (that are relevant), SALI values are consistently
 part significantly. This is not investigated, although the apparent errors at high value ranges are
 the perhaps most critical features of the reported RF models.}
 
-XXX
+Yes, there do appear to be such systematic errors - at this stage it's not clear what is the
+cause. However we have noted that while it is clearly evident for the Cavalli dataset, it is not
+as obvious for the ChEMBL datasets and in some cases is the reverse of what we see in the Cavalli
+case. For example, for the Dai dataset, we observed that lower SALI values are overestimated
+(whereas the Cavalli predictions are underestimaetd at low SALI values).
+
+We hypothesize that the descriptors employed do not differentiate between observations with low and
+high SALI values very well, leading to overestimation of small values and underestimation of high
+SALI values. We have justified this by comparing descriptor distance distributions between the
+group of observations with low SALI values and those with high SALI values. The two distributions
+nearly completely overlap, supporting this hypothesis.
 
 \textbf{(8) In the section “Extending a landscape”, predictions are finally reported for only three (!)
 molecules taken out of each data set. Carefully put, the predictions are heterogeneous. On the basis
 of the results reported for this little bit of evaluation, one would be hard pressed to make a case
 for the ability of the approach to predict activity cliffs with any certainty.}
 
-XXX
+We have updated this section to include several more hold out molecules. It should be noted that this section
+examines the model from a different viewpoint compared to Section 4. Specifically, Section 4.1
+develops models in which we remove molecules from the original dataset. Given the size of the
+original datasets, removing more than 10 or so, leads smaller pairwise datasets. Simultaneously, the
+predictions for this validation stratgey are not just for the 10 hold out molecules - it will be 10
+$\times m$ where $m$ is the number of the molecules in the original datasets. Thus the number of
+predictiosn range from 250 to 340 values. Summarizing more than a few of these hold out molecules
+becomes cumbersome.
+
 
 \textbf{(9) For the prediction of activity cliffs, SALI values must be calculated for compound
   pairs. This is the central idea of the approach. Accordingly, fingerprint descriptors and potency
@@ -159,6 +177,15 @@ difference in activity), the methodology does let one rank pairs of molecules an
 Figures 7 and 9, one can compare the strucural similarity and activity difference (or ratio) in 2D,
 allowing one to separate ``true'' cliffs from apparent ones.
 
+In addition, Figures 8 and 10 do suggest that the approach does capture actual activity cliffs - it
+so happens that the datasets considered do not contain too many of them, to allow one to provide a
+large scale validation.
+
+As noted in Section 5, predictive performance can likely be increased by a larger, more diverse
+descriptor pools as well as alternative modeling methods. The goal of this paper is to suggest that
+the proposed pairwise methodology does let as address the identifcation of activity cliffs in a
+prospective manner.
+
 \textbf{(10) It also remains largely obscure how an activity landscape should be extended following
   this approach by compounds for which no activity information is available. Should the activity
   first be predicted by an RF model and then used for pair-based SALI score calculations?  One would
@@ -205,6 +232,6 @@ set, we resort to a training/test split, which is an accepted approach in QSAR m
 \textbf{5.  There is no discussion/direction of how to use the methodology in new applications.}
 
 Section 4.1 in the original manuscript specifically addresses how one might use the proposed
-methodology
+methodology. This has been made more explicit in the updated manuscript.
 
 \end{document}
